@@ -1,6 +1,7 @@
 import { IncomingWebhook } from '@slack/client';
 
-const webhook = new IncomingWebhook(process.env.SLACK_WEBHOOK);
+const webhook = process.env.SLACK_WEBHOOK ?
+  new IncomingWebhook(process.env.SLACK_WEBHOOK) : { send: () => Promise.resolve() };
 
 // eslint-disable-next-line import/prefer-default-export
 export const notifyNewUser = (profile, provider) =>
