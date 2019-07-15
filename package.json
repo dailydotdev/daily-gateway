@@ -45,7 +45,7 @@
     "koa-proxies": "^0.8.1",
     "koa-router": "^7.2.1",
     "koa-useragent": "^1.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "mysql": "^2.15.0",
     "pino": "^4.7.3",
     "request": "^2.85.0",
