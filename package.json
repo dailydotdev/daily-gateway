@@ -35,7 +35,7 @@
     "@koa/cors": "2",
     "@slack/client": "^4.3.1",
     "jsonwebtoken": "^8.3.0",
-    "knex": "^0.15.2",
+    "knex": "^0.19.5",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.0",
     "koa-context-validator": "^0.4.1",
