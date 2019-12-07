@@ -4,15 +4,15 @@ import config from './config';
 export const setTrackingId = (ctx, id) => {
   ctx.trackingId = id;
   if (id) {
-    ctx.cookies.set(config.cookies.key, id, config.cookies.opts);
+    ctx.cookies.set(config.cookies.tracking.key, id, config.cookies.tracking.opts);
   } else {
-    ctx.cookies.set(config.cookies.key);
+    ctx.cookies.set(config.cookies.tracking.key);
   }
 };
 
 export const getTrackingId = (ctx) => {
   if (!ctx.trackingId || !ctx.trackingId.length) {
-    ctx.trackingId = ctx.cookies.get(config.cookies.key, config.cookies.opts);
+    ctx.trackingId = ctx.cookies.get(config.cookies.tracking.key, config.cookies.tracking.opts);
   }
 
   return ctx.trackingId;

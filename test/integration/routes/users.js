@@ -5,6 +5,7 @@ import knexCleaner from 'knex-cleaner';
 import db, { migrate } from '../../../src/db';
 import app from '../../../src';
 import role from '../../../src/models/role';
+import { sign } from '../../../src/jwt';
 
 describe('users routes', () => {
   let request;
@@ -35,9 +36,10 @@ describe('users routes', () => {
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
+      const code = await sign({ providerCode: 'code', provider: 'github' });
       const { body } = await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       nock('https://api.github.com')
@@ -70,9 +72,10 @@ describe('users routes', () => {
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
+      const code = await sign({ providerCode: 'code', provider: 'github' });
       const { body } = await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       nock('https://api.github.com')
@@ -108,9 +111,10 @@ describe('users routes', () => {
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
+      const code = await sign({ providerCode: 'code', provider: 'github' });
       const { body } = await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       await role.add(body.id, 'admin');

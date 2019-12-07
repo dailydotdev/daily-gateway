@@ -11,7 +11,7 @@ import proxy from 'koa-proxies';
 import config from './config';
 import errorHandler from './middlewares/errorHandler';
 import logger from './logger';
-import { verify as verifyJwt } from './jwt';
+import { verifyMiddleware as verifyJwtMiddleware, verify as verifyJwt } from './jwt';
 import verifyTracking from './tracking';
 
 import health from './routes/health';
@@ -42,7 +42,15 @@ app.use(cors({
 }));
 app.use(KoaPinoLogger({ logger, useLevel: 'debug' }));
 app.use(errorHandler());
-app.use(verifyJwt);
+app.use(verifyJwtMiddleware);
+// Cookie based authentication
+app.use(async (ctx, next) => {
+  const cookie = ctx.cookies.get(config.cookies.auth.key);
+  if (!ctx.state.user && cookie) {
+    ctx.state.user = await verifyJwt(cookie);
+  }
+  return next();
+});
 app.use(userAgent);
 
 // Machine-to-machine authentication

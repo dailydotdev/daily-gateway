@@ -27,15 +27,27 @@ const config = {
   port,
   mysql: getMysqlConfig(),
   cookies: {
-    opts: {
-      domain: process.env.COOKIES_DOMAIN,
-      maxAge: 1000 * 60 * 60 * 24 * 365,
-      overwrite: true,
-      httpOnly: false,
-      signed: false,
-    },
     secret: process.env.COOKIES_KEY,
-    key: 'da2',
+    tracking: {
+      opts: {
+        domain: process.env.COOKIES_DOMAIN,
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        overwrite: true,
+        httpOnly: false,
+        signed: false,
+      },
+      key: 'da2',
+    },
+    auth: {
+      opts: {
+        domain: process.env.COOKIES_DOMAIN,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+        overwrite: true,
+        httpOnly: true,
+        signed: true,
+      },
+      key: 'da3',
+    },
   },
   cors: {
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN : '*',

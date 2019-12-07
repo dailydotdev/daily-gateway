@@ -4,6 +4,7 @@ import provider from '../models/provider';
 import role from '../models/role';
 import { fetchProfile, refreshGoogleToken, fetchInfo } from '../profile';
 import { getTrackingId, setTrackingId } from '../tracking';
+import config from '../config';
 
 const router = Router({
   prefix: '/users',
@@ -29,6 +30,12 @@ router.get(
           res.access_token, new Date(Date.now() + (res.expires_in * 1000)),
         );
         userProvider.accessToken = res.access_token;
+      }
+
+      // Refresh the auth cookie
+      const auth = ctx.cookies.get(config.cookies.auth.key);
+      if (auth) {
+        ctx.cookies.set(config.cookies.auth.key, auth, config.cookies.auth.opts);
       }
 
       const profile = await fetchProfile(userProvider.provider, userProvider.accessToken);
@@ -82,6 +89,7 @@ router.post(
   '/logout',
   async (ctx) => {
     setTrackingId(ctx, null);
+    ctx.cookies.set(config.cookies.auth.key);
     ctx.status = 204;
   },
 );

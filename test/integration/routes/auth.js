@@ -5,7 +5,9 @@ import knexCleaner from 'knex-cleaner';
 import db, { migrate } from '../../../src/db';
 import provider from '../../../src/models/provider';
 import app from '../../../src';
+import { sign } from '../../../src/jwt';
 import refreshToken from '../../../src/models/refreshToken';
+import { generateChallenge } from '../../../src/auth';
 
 describe('auth routes', () => {
   let request;
@@ -25,6 +27,102 @@ describe('auth routes', () => {
     server.close();
   });
 
+  describe('oauth pkce', () => {
+    it('should throw bad request', async () => {
+      await request
+        .post('/v1/auth/authenticate')
+        .expect(400);
+    });
+
+    it('should throw forbidden when code is wrong', async () => {
+      await request
+        .post('/v1/auth/authenticate')
+        .send({ code: 'code', code_verifier: 'verify' })
+        .expect(403);
+    });
+
+    it('should throw forbidden when code challenge does not match verifier', async () => {
+      const verifier = 'verify';
+      const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: 'challenge' });
+      await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
+        .expect(403);
+    });
+
+    it('should register a new user', async () => {
+      nock('https://github.com')
+        .post('/login/oauth/access_token', body => body.code === 'code')
+        .reply(200, { access_token: 'token' });
+
+      nock('https://api.github.com', {
+        reqheaders: {
+          'User-Agent': 'Daily',
+        },
+      })
+        .get('/user')
+        .query({ access_token: 'token' })
+        .reply(200, { id: 'github_id' });
+
+      const verifier = 'verify';
+      const code = await sign({
+        providerCode: 'code',
+        provider: 'github',
+        codeChallenge: generateChallenge(verifier),
+      });
+      const res = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
+        .expect(200);
+
+      expect(res.body.newUser).to.equal(true);
+      const model = await provider.getByUserId(res.body.id, 'github');
+      expect(model.accessToken).to.equal('token');
+      expect(model.providerId).to.equal('github_id');
+    });
+
+    it('should login the existing in user', async () => {
+      nock('https://github.com')
+        .post('/login/oauth/access_token', body => body.code === 'code')
+        .reply(200, { access_token: 'token' });
+
+      nock('https://api.github.com')
+        .get('/user')
+        .query({ access_token: 'token' })
+        .reply(200, { id: 'github_id' });
+
+      const verifier = 'verify';
+      const code = await sign({
+        providerCode: 'code',
+        provider: 'github',
+        codeChallenge: generateChallenge(verifier),
+      });
+
+      await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
+        .expect(200);
+
+      nock('https://github.com')
+        .post('/login/oauth/access_token', body => body.code === 'code')
+        .reply(200, { access_token: 'token2' });
+
+      nock('https://api.github.com')
+        .get('/user')
+        .query({ access_token: 'token2' })
+        .reply(200, { id: 'github_id' });
+
+      const res = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
+        .expect(200);
+
+      expect(res.body.newUser).to.equal(false);
+      const model = await provider.getByUserId(res.body.id, 'github');
+      expect(model.accessToken).to.equal('token2');
+    });
+  });
+
   describe('github', () => {
     it('should throw bad request', async () => {
       await request
@@ -33,10 +131,6 @@ describe('auth routes', () => {
     });
 
     it('should throw forbidden when code is wrong', async () => {
-      nock('https://github.com')
-        .post('/login/oauth/access_token', () => true)
-        .reply(200, {});
-
       await request
         .post('/v1/auth/github/authenticate')
         .send({ code: 'code', state: 'state' })
@@ -57,9 +151,10 @@ describe('auth routes', () => {
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
 
+      const code = await sign({ providerCode: 'code', provider: 'github' });
       const res = await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       expect(res.body.newUser).to.equal(true);
@@ -78,9 +173,11 @@ describe('auth routes', () => {
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
 
+      const code = await sign({ providerCode: 'code', provider: 'github' }, null);
+
       await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       nock('https://github.com')
@@ -94,7 +191,7 @@ describe('auth routes', () => {
 
       const res = await request
         .post('/v1/auth/github/authenticate')
-        .send({ code: 'code' })
+        .send({ code: code.token })
         .expect(200);
 
       expect(res.body.newUser).to.equal(false);
