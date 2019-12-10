@@ -2,7 +2,7 @@ import Router from 'koa-router';
 import { ForbiddenError } from '../errors';
 import provider from '../models/provider';
 import role from '../models/role';
-import { fetchProfile, refreshGoogleToken, fetchInfo } from '../profile';
+import { fetchProfile, refreshGoogleToken } from '../profile';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 
@@ -64,7 +64,8 @@ router.get(
       if (!userProvider) {
         throw new ForbiddenError();
       }
-      ctx.body = await fetchInfo(userProvider);
+      const profile = await fetchProfile(userProvider.provider, userProvider.accessToken);
+      ctx.body = { name: profile.name, email: profile.email };
       ctx.status = 200;
     } else {
       throw new ForbiddenError();

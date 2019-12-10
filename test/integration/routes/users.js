@@ -34,7 +34,7 @@ describe('users routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -50,7 +50,7 @@ describe('users routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -80,7 +80,7 @@ describe('users routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -101,7 +101,7 @@ describe('users routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       const res = await request
         .get('/v1/users/me/info')
@@ -124,7 +124,7 @@ describe('users routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')

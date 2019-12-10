@@ -58,7 +58,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com', {
         reqheaders: {
@@ -94,7 +94,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -120,7 +120,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token2' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -160,7 +160,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com', {
         reqheaders: {
@@ -191,7 +191,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
@@ -212,7 +212,7 @@ describe('auth routes', () => {
       nock('https://api.github.com')
         .get('/user/public_emails')
         .query({ access_token: 'token2' })
-        .reply(200, { emails: ['email@foo.com'] });
+        .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com')
         .get('/user')
