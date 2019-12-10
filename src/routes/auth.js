@@ -10,6 +10,7 @@ import { notifyNewUser } from '../slack';
 import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
+import { addUserToContacts } from '../mailing';
 
 const router = Router({
   prefix: '/auth',
@@ -96,13 +97,20 @@ const authenticate = async (ctx, redirectUriFunc) => {
     newUser = false;
     await provider.updateToken(userProvider.userId, providerName, res.access_token);
   } else {
+    const userId = getTrackingId(ctx);
     await provider.add(
-      getTrackingId(ctx), providerName, res.access_token, profile.id,
+      userId, providerName, res.access_token, profile.id,
       res.expires_in ? (new Date(Date.now() + (res.expires_in * 1000))) : null,
       res.refresh_token,
     );
 
     notifyNewUser(profile, providerName);
+    if (profile.email && profile.email.indexOf('users.noreply.github.com') < 0) {
+      addUserToContacts(Object.assign({}, profile, { id: userId }), '85a1951f-5f0c-459f-bf5e-e5c742986a50')
+        .catch((err) => {
+          ctx.log.warn({ err }, `failed to add ${userId} to contacts`);
+        });
+    }
   }
 
   const userId = getTrackingId(ctx);

@@ -161,6 +161,11 @@ spec:
               secretKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: API_SECRET
+          - name: SENDGRID_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: SENDGRID_API_KEY
           volumeMounts:
           - name: config
             mountPath: "/etc/config"
