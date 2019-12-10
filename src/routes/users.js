@@ -24,7 +24,7 @@ router.get(
 
       if (userProvider.expiresIn && userProvider.expiresIn < new Date()) {
         ctx.log.info(`refreshing access token for user ${userId}`);
-        const res = await refreshGoogleToken(userId, userProvider.refreshToken);
+        const res = await refreshGoogleToken(userProvider.providerId, userProvider.refreshToken);
         await provider.updateToken(
           userId, userProvider.provider,
           res.access_token, new Date(Date.now() + (res.expires_in * 1000)),

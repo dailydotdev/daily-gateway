@@ -55,6 +55,11 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
+      nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token' })
+        .reply(200, { emails: ['email@foo.com'] });
+
       nock('https://api.github.com', {
         reqheaders: {
           'User-Agent': 'Daily',
@@ -87,6 +92,11 @@ describe('auth routes', () => {
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token' })
+        .reply(200, { emails: ['email@foo.com'] });
+
+      nock('https://api.github.com')
         .get('/user')
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
@@ -106,6 +116,11 @@ describe('auth routes', () => {
       nock('https://github.com')
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token2' });
+
+      nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token2' })
+        .reply(200, { emails: ['email@foo.com'] });
 
       nock('https://api.github.com')
         .get('/user')
@@ -142,6 +157,11 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
+      nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token' })
+        .reply(200, { emails: ['email@foo.com'] });
+
       nock('https://api.github.com', {
         reqheaders: {
           'User-Agent': 'Daily',
@@ -169,6 +189,11 @@ describe('auth routes', () => {
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token' })
+        .reply(200, { emails: ['email@foo.com'] });
+
+      nock('https://api.github.com')
         .get('/user')
         .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
@@ -183,6 +208,11 @@ describe('auth routes', () => {
       nock('https://github.com')
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token2' });
+
+      nock('https://api.github.com')
+        .get('/user/public_emails')
+        .query({ access_token: 'token2' })
+        .reply(200, { emails: ['email@foo.com'] });
 
       nock('https://api.github.com')
         .get('/user')
