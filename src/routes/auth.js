@@ -34,7 +34,7 @@ const authorize = (ctx, providerName, redirectUri) => {
 
   validateRedirectUri(query.redirect_uri);
   const providerConfig = providersConfig[providerName];
-  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(query.redirect_uri)}`;
+  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(JSON.stringify(query))}`;
 
   ctx.status = 307;
   ctx.redirect(url);
@@ -42,12 +42,12 @@ const authorize = (ctx, providerName, redirectUri) => {
 
 const callback = async (ctx, providerName, payloadFunc) => {
   const { query } = ctx.request;
-
-  validateRedirectUri(query.state);
-  const { token: code } = await signJwt(payloadFunc(query), 60 * 1000);
+  const state = JSON.parse(query.state);
+  validateRedirectUri(state.redirect_uri);
+  const { token: code } = await signJwt(payloadFunc(query, state), 60 * 1000);
 
   ctx.status = 307;
-  ctx.redirect(`${query.state}${query.state.indexOf('?') > -1 ? '&' : '?'}code=${code}`);
+  ctx.redirect(`${state.redirect_uri}${state.redirect_uri.indexOf('?') > -1 ? '&' : '?'}code=${code}`);
 };
 
 const authenticate = async (ctx, redirectUriFunc) => {
@@ -131,10 +131,12 @@ router.get(
       code_challenge: string().required(),
       provider: string().required(),
     },
+  }, {
+    stripUnknown: true,
   }),
   async (ctx) => {
     const { query } = ctx.request;
-    const redirectUri = `${config.urlPrefix}/v1/auth/callback?provider=${query.provider}&code_challenge=${query.code_challenge}`;
+    const redirectUri = `${config.urlPrefix}/v1/auth/callback`;
     authorize(ctx, query.provider, redirectUri);
   },
 );
@@ -144,17 +146,15 @@ router.get(
   validator({
     query: {
       state: string(),
-      code_challenge: string().required(),
-      provider: string().required(),
       code: string().required(),
     },
   }, {
     stripUnknown: true,
   }),
-  ctx => callback(ctx, ctx.request.query.provider, query => ({
+  ctx => callback(ctx, ctx.request.query.provider, (query, state) => ({
     providerCode: query.code,
-    provider: query.provider,
-    codeChallenge: query.code_challenge,
+    provider: state.provider,
+    codeChallenge: state.code_challenge,
   })),
 );
 
@@ -169,7 +169,7 @@ router.post(
     stripUnknown: true,
   }),
   async (ctx) => {
-    const user = await authenticate(ctx, (providerName, codeJwt) => `${config.urlPrefix}/v1/auth/callback?provider=${providerName}&code_challenge=${codeJwt.codeChallenge}`);
+    const user = await authenticate(ctx, () => `${config.urlPrefix}/v1/auth/callback`);
     const accessToken = await signJwt({ userId: user.id }, null);
     ctx.cookies.set(config.cookies.auth.key, accessToken.token, config.cookies.auth.opts);
 
