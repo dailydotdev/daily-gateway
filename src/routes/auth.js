@@ -11,6 +11,7 @@ import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
 import { addUserToContacts } from '../mailing';
+import { addSubdomainOpts } from '../cookies';
 
 const router = Router({
   prefix: '/auth',
@@ -136,7 +137,7 @@ router.get(
   }),
   async (ctx) => {
     const { query } = ctx.request;
-    const redirectUri = `${config.urlPrefix}/v1/auth/callback`;
+    const redirectUri = `${ctx.request.origin}/v1/auth/callback`;
     authorize(ctx, query.provider, redirectUri);
   },
 );
@@ -169,9 +170,12 @@ router.post(
     stripUnknown: true,
   }),
   async (ctx) => {
-    const user = await authenticate(ctx, () => `${config.urlPrefix}/v1/auth/callback`);
+    const user = await authenticate(ctx, () => `${ctx.request.origin}/v1/auth/callback`);
     const accessToken = await signJwt({ userId: user.id }, null);
-    ctx.cookies.set(config.cookies.auth.key, accessToken.token, config.cookies.auth.opts);
+    ctx.cookies.set(
+      config.cookies.auth.key, accessToken.token,
+      addSubdomainOpts(ctx, config.cookies.auth.opts),
+    );
 
     ctx.log.info(`connected ${user.id} with ${user.providers[0]}`);
     ctx.status = 200;
@@ -180,7 +184,7 @@ router.post(
 );
 
 Object.keys(providersConfig).forEach((providerName) => {
-  const redirectUri = `${config.urlPrefix}/v1/auth/${providerName}/callback`;
+  const redirectUri = ctx => `${ctx.request.origin}/v1/auth/${providerName}/callback`;
 
   router.get(
     `/${providerName}/authorize`,
@@ -189,7 +193,7 @@ Object.keys(providersConfig).forEach((providerName) => {
         redirect_uri: string().required(),
       },
     }),
-    ctx => authorize(ctx, providerName, redirectUri),
+    ctx => authorize(ctx, providerName, redirectUri(ctx)),
   );
 
   router.get(`/${providerName}/callback`, ctx => callback(ctx, ctx.request.query.provider, query => ({
@@ -207,7 +211,7 @@ Object.keys(providersConfig).forEach((providerName) => {
       stripUnknown: true,
     }),
     async (ctx) => {
-      const user = await authenticate(ctx, () => redirectUri);
+      const user = await authenticate(ctx, () => redirectUri(ctx));
       const userId = user.id;
       const accessToken = await signJwt({ userId });
       const rfToken = refreshToken.generate(userId);

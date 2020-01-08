@@ -5,6 +5,7 @@ import role from '../models/role';
 import { fetchProfile, refreshGoogleToken } from '../profile';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
+import { addSubdomainOpts } from '../cookies';
 
 const router = Router({
   prefix: '/users',
@@ -35,7 +36,10 @@ router.get(
       // Refresh the auth cookie
       const auth = ctx.cookies.get(config.cookies.auth.key);
       if (auth) {
-        ctx.cookies.set(config.cookies.auth.key, auth, config.cookies.auth.opts);
+        ctx.cookies.set(
+          config.cookies.auth.key, auth,
+          addSubdomainOpts(ctx, config.cookies.auth.opts),
+        );
       }
 
       const profile = await fetchProfile(userProvider.provider, userProvider.accessToken);

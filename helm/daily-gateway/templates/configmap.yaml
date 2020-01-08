@@ -8,7 +8,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  URL_PREFIX: {{ .Values.appConfig.urlPrefix }}
   CORS_ORIGIN: {{ .Values.appConfig.corsOrigin }}
   MONETIZATION_URL: {{ .Values.appConfig.monetizationUrl }}
   REDIRECTOR_URL: {{ .Values.appConfig.redirectorUrl }}

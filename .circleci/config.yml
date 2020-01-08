@@ -47,7 +47,6 @@ jobs:
             JWT_AUDIENCE: Daily Testing
             JWT_ISSUER: Daily API Testing
             COOKIES_KEY: topsecret
-            COOKIES_DOMAIN: localhost
       - store_test_results:
           path: ./test-results
       - store_artifacts:

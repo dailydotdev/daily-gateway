@@ -7,18 +7,16 @@ import { fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleTok
 const fetchGithub = async (accessToken) => {
   const profile = await fetchGithubProfile(accessToken);
   const emails = await callGithubApi('user/public_emails', accessToken);
-  if (emails.length) {
-    return [{
-      name: profile.name,
-      email: emails[0].email,
-    }];
-  }
-
-  return [];
+  return [{
+    name: profile.name,
+    user: profile.login,
+    followers: profile.followers,
+    email: emails && emails.length && emails[0].email,
+  }];
 };
 
-const fetchGoogle = async (userId, refreshToken) => {
-  const token = await refreshGoogleToken(userId, refreshToken);
+const fetchGoogle = async (providerId, refreshToken) => {
+  const token = await refreshGoogleToken(providerId, refreshToken);
   const profile = await fetchGoogleProfile(token.access_token);
   if (profile.emailAddresses.length) {
     return [{
@@ -32,7 +30,7 @@ const fetchGoogle = async (userId, refreshToken) => {
 
 const fetchInfo = async (user) => {
   if (user.provider === 'google') {
-    return fetchGoogle(user.userId, user.refreshToken);
+    return fetchGoogle(user.providerId, user.refreshToken);
   }
   return fetchGithub(user.accessToken);
 };
@@ -42,15 +40,31 @@ const fetchInfos = async (users, info) => {
     return info;
   }
 
-  const parallel = 45;
+  const parallel = 50;
   const runUsers = users.slice(0, parallel);
   const newInfo = (await Promise.all(runUsers.map(u =>
     fetchInfo(u)
+      .then(([p]) => {
+        if (p) {
+          const res = {
+            email: p.email,
+            user_id: u.userId,
+          };
+          if (p.name) {
+            const split = p.name.split(' ');
+            [res.first_name] = split;
+            res.last_name = split.slice(1).join(' ');
+          }
+          return [res];
+        }
+        return [];
+      })
       .catch((e) => {
         console.error(e);
         return [];
       }))))
-    .reduce((acc, val) => acc.concat(val), []);
+    .reduce((acc, val) => acc.concat(val), [])
+    .filter(p => p.email && p.email.indexOf('users.noreply.github.com') < 0);
   console.log(`next batch, users left: ${users.length}`);
   return fetchInfos(users.slice(parallel), info.concat(newInfo));
 };
@@ -58,6 +72,8 @@ const fetchInfos = async (users, info) => {
 const run = async () => {
   const users = await db.select('user_id', 'provider', 'provider_id', 'access_token', 'refresh_token', 'expires_in')
     .from('providers')
+    .orderBy('created_at')
+    .where('created_at')
     .map(toCamelCase);
   return fetchInfos(users, []);
 };

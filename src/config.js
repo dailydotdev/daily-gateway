@@ -30,7 +30,6 @@ const config = {
     secret: process.env.COOKIES_KEY,
     tracking: {
       opts: {
-        domain: process.env.COOKIES_DOMAIN,
         maxAge: 1000 * 60 * 60 * 24 * 365,
         overwrite: true,
         httpOnly: false,
@@ -40,7 +39,6 @@ const config = {
     },
     auth: {
       opts: {
-        domain: process.env.COOKIES_DOMAIN,
         maxAge: 1000 * 60 * 60 * 24 * 30,
         overwrite: true,
         httpOnly: true,
@@ -52,7 +50,6 @@ const config = {
   cors: {
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN : '*',
   },
-  urlPrefix: process.env.URL_PREFIX,
   github: {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,

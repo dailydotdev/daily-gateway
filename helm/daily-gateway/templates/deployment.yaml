@@ -71,11 +71,6 @@ spec:
               secretKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: MYSQL_HOST
-          - name: COOKIES_DOMAIN
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "daily-gateway.fullname" . }}
-                key: COOKIES_DOMAIN
           - name: COOKIES_KEY
             valueFrom:
               secretKeyRef:
@@ -121,11 +116,6 @@ spec:
               secretKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: SLACK_WEBHOOK
-          - name: URL_PREFIX
-            valueFrom:
-              configMapKeyRef:
-                name: {{ template "daily-gateway.fullname" . }}
-                key: URL_PREFIX
           - name: CORS_ORIGIN
             valueFrom:
               configMapKeyRef:

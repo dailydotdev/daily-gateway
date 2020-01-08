@@ -1,10 +1,14 @@
 import uuid4 from 'uuid/v4';
 import config from './config';
+import { addSubdomainOpts } from './cookies';
 
 export const setTrackingId = (ctx, id) => {
   ctx.trackingId = id;
   if (id) {
-    ctx.cookies.set(config.cookies.tracking.key, id, config.cookies.tracking.opts);
+    ctx.cookies.set(
+      config.cookies.tracking.key, id,
+      addSubdomainOpts(ctx, config.cookies.tracking.opts),
+    );
   } else {
     ctx.cookies.set(config.cookies.tracking.key);
   }
