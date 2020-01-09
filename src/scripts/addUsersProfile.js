@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import fs from 'fs';
 import db, { toCamelCase } from '../db';
 import userModel from '../models/user';
 import { fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleToken } from '../profile';
