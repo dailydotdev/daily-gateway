@@ -4,6 +4,7 @@ import validator, { object, string } from 'koa-context-validator';
 import config from '../config';
 import provider from '../models/provider';
 import refreshToken from '../models/refreshToken';
+import userModel from '../models/user';
 import { fetchProfile } from '../profile';
 import { sign as signJwt, verify as verifyJwt } from '../jwt';
 import { notifyNewUser } from '../slack';
@@ -93,20 +94,27 @@ const authenticate = async (ctx, redirectUriFunc) => {
   const userProvider = await provider.getByProviderId(profile.id, providerName);
 
   let newUser = true;
+  let user;
   if (userProvider) {
     setTrackingId(ctx, userProvider.userId);
     newUser = false;
-    await provider.updateToken(userProvider.userId, providerName, res.access_token);
+    [user] = await Promise.all([
+      userModel.getById(userProvider.userId),
+      provider.updateToken(userProvider.userId, providerName, res.access_token),
+    ]);
   } else {
     const userId = getTrackingId(ctx);
-    await provider.add(
-      userId, providerName, res.access_token, profile.id,
-      res.expires_in ? (new Date(Date.now() + (res.expires_in * 1000))) : null,
-      res.refresh_token,
-    );
-
+    const hasEmail = profile.email && profile.email.indexOf('users.noreply.github.com') < 0;
+    [user] = await Promise.all([
+      userModel.add(userId, profile.name, hasEmail ? profile.email : undefined, profile.image),
+      provider.add(
+        userId, providerName, res.access_token, profile.id,
+        res.expires_in ? (new Date(Date.now() + (res.expires_in * 1000))) : null,
+        res.refresh_token,
+      ),
+    ]);
     notifyNewUser(profile, providerName);
-    if (profile.email && profile.email.indexOf('users.noreply.github.com') < 0) {
+    if (hasEmail) {
       addUserToContacts(Object.assign({}, profile, { id: userId }), '85a1951f-5f0c-459f-bf5e-e5c742986a50')
         .catch((err) => {
           ctx.log.warn({ err }, `failed to add ${userId} to contacts`);
@@ -114,14 +122,10 @@ const authenticate = async (ctx, redirectUriFunc) => {
     }
   }
 
-  const userId = getTrackingId(ctx);
-  return {
-    id: userId,
+  return Object.assign({}, user, {
     providers: [providerName],
-    name: profile.name,
-    image: profile.image,
     newUser,
-  };
+  });
 };
 
 router.get(

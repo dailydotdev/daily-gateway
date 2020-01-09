@@ -4,6 +4,7 @@ import nock from 'nock';
 import knexCleaner from 'knex-cleaner';
 import db, { migrate } from '../../../src/db';
 import provider from '../../../src/models/provider';
+import userModel from '../../../src/models/user';
 import app from '../../../src';
 import { sign } from '../../../src/jwt';
 import refreshToken from '../../../src/models/refreshToken';
@@ -67,7 +68,7 @@ describe('auth routes', () => {
       })
         .get('/user')
         .query({ access_token: 'token' })
-        .reply(200, { id: 'github_id' });
+        .reply(200, { id: 'github_id', name: 'John', avatar_url: 'https://acme.com/john.png' });
 
       const verifier = 'verify';
       const code = await sign({
@@ -84,6 +85,13 @@ describe('auth routes', () => {
       const model = await provider.getByUserId(res.body.id, 'github');
       expect(model.accessToken).to.equal('token');
       expect(model.providerId).to.equal('github_id');
+      const user = await userModel.getById(res.body.id);
+      expect(user).to.deep.equal({
+        id: res.body.id,
+        name: 'John',
+        email: 'email@foo.com',
+        image: 'https://acme.com/john.png',
+      });
     });
 
     it('should login the existing in user', async () => {
