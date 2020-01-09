@@ -1,8 +1,8 @@
 import Router from 'koa-router';
 import { ForbiddenError } from '../errors';
 import provider from '../models/provider';
+import userModel from '../models/user';
 import role from '../models/role';
-import { fetchProfile, refreshGoogleToken } from '../profile';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { addSubdomainOpts } from '../cookies';
@@ -17,20 +17,14 @@ router.get(
     const trackingId = getTrackingId(ctx);
     if (ctx.state.user) {
       const { userId } = ctx.state.user;
-      const userProvider = await provider.getByUserId(userId);
-      if (!userProvider) {
+
+      const [user, userProvider] = await Promise.all([
+        userModel.getById(userId),
+        provider.getByUserId(userId),
+      ]);
+      if (!user) {
         setTrackingId(ctx, null);
         throw new ForbiddenError();
-      }
-
-      if (userProvider.expiresIn && userProvider.expiresIn < new Date()) {
-        ctx.log.info(`refreshing access token for user ${userId}`);
-        const res = await refreshGoogleToken(userProvider.providerId, userProvider.refreshToken);
-        await provider.updateToken(
-          userId, userProvider.provider,
-          res.access_token, new Date(Date.now() + (res.expires_in * 1000)),
-        );
-        userProvider.accessToken = res.access_token;
       }
 
       // Refresh the auth cookie
@@ -42,14 +36,8 @@ router.get(
         );
       }
 
-      const profile = await fetchProfile(userProvider.provider, userProvider.accessToken);
       ctx.status = 200;
-      ctx.body = {
-        id: userId,
-        providers: [userProvider.provider],
-        name: profile.name,
-        image: profile.image,
-      };
+      ctx.body = Object.assign({}, user, { providers: [userProvider.provider] });
     } else if (trackingId && trackingId.length) {
       ctx.status = 200;
       ctx.body = { id: trackingId };
@@ -64,12 +52,11 @@ router.get(
   async (ctx) => {
     if (ctx.state.user) {
       const { userId } = ctx.state.user;
-      const userProvider = await provider.getByUserId(userId);
-      if (!userProvider) {
+      const user = await userModel.getById(userId);
+      if (!user) {
         throw new ForbiddenError();
       }
-      const profile = await fetchProfile(userProvider.provider, userProvider.accessToken);
-      ctx.body = { name: profile.name, email: profile.email };
+      ctx.body = { name: user.name, email: user.email };
       ctx.status = 200;
     } else {
       throw new ForbiddenError();

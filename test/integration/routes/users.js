@@ -67,6 +67,7 @@ describe('users routes', () => {
         providers: ['github'],
         name: 'user',
         image: 'https://avatar.com',
+        email: 'email@foo.com',
       });
     });
   });
