@@ -3,6 +3,7 @@ import { ForbiddenError } from '../errors';
 import provider from '../models/provider';
 import userModel from '../models/user';
 import role from '../models/role';
+import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { addSubdomainOpts } from '../cookies';
@@ -38,6 +39,11 @@ router.get(
 
       ctx.status = 200;
       ctx.body = Object.assign({}, user, { providers: [userProvider.provider] });
+      const app = ctx.request.get('app');
+      if (app === 'extension') {
+        visit.upsert(userId, app, new Date())
+          .catch(err => ctx.log.error({ err }, `failed to update visit for ${userId}`));
+      }
     } else if (trackingId && trackingId.length) {
       ctx.status = 200;
       ctx.body = { id: trackingId };
