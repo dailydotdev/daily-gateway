@@ -56,18 +56,21 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com', {
         reqheaders: {
+          Authorization: 'token token',
           'User-Agent': 'Daily',
         },
       })
         .get('/user')
-        .query({ access_token: 'token' })
         .reply(200, { id: 'github_id', name: 'John', avatar_url: 'https://acme.com/john.png' });
 
       const verifier = 'verify';
@@ -99,14 +102,22 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user')
-        .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
 
       const verifier = 'verify';
@@ -125,14 +136,22 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token2' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token2',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token2' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token2',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user')
-        .query({ access_token: 'token2' })
         .reply(200, { id: 'github_id' });
 
       const res = await request
@@ -165,18 +184,22 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
       nock('https://api.github.com', {
         reqheaders: {
+          Authorization: 'token token',
           'User-Agent': 'Daily',
         },
       })
         .get('/user')
-        .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
 
       const code = await sign({ providerCode: 'code', provider: 'github' });
@@ -196,14 +219,22 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user')
-        .query({ access_token: 'token' })
         .reply(200, { id: 'github_id' });
 
       const code = await sign({ providerCode: 'code', provider: 'github' }, null);
@@ -217,14 +248,22 @@ describe('auth routes', () => {
         .post('/login/oauth/access_token', body => body.code === 'code')
         .reply(200, { access_token: 'token2' });
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token2',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user/public_emails')
-        .query({ access_token: 'token2' })
         .reply(200, [{ email: 'email@foo.com' }]);
 
-      nock('https://api.github.com')
+      nock('https://api.github.com', {
+        reqheaders: {
+          Authorization: 'token token2',
+          'User-Agent': 'Daily',
+        },
+      })
         .get('/user')
-        .query({ access_token: 'token2' })
         .reply(200, { id: 'github_id' });
 
       const res = await request
