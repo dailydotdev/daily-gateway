@@ -25,8 +25,9 @@ export const fetchGoogleProfile = accessToken =>
 
 export const callGithubApi = (endpoint, accessToken) =>
   rp.get({
-    url: `https://api.github.com/${endpoint}?access_token=${accessToken}`,
+    url: `https://api.github.com/${endpoint}`,
     headers: {
+      Authorization: `token ${accessToken}`,
       'User-Agent': 'Daily',
     },
   })

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
-import { fetchInfo } from '../profile';
+import { fetchProfile } from '../profile';
 import provider from '../models/provider';
 
 const run = async (userId) => {
   const userProvider = await provider.getByUserId(userId);
-  return fetchInfo(userProvider);
+  return fetchProfile(userProvider.provider, userProvider.accessToken);
 };
 
 run(process.argv[process.argv.length - 1])

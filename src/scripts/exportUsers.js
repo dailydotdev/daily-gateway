@@ -49,6 +49,7 @@ const fetchInfos = async (users, info) => {
           const res = {
             email: p.email,
             user_id: u.userId,
+            followers: p.followers,
           };
           if (p.name) {
             const split = p.name.split(' ');
@@ -73,7 +74,7 @@ const run = async () => {
   const users = await db.select('user_id', 'provider', 'provider_id', 'access_token', 'refresh_token', 'expires_in')
     .from('providers')
     .orderBy('created_at')
-    .where('created_at')
+    .where('provider', '=', 'github')
     .map(toCamelCase);
   return fetchInfos(users, []);
 };
