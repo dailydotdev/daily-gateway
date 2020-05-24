@@ -85,6 +85,7 @@ describe('users routes', () => {
         name: 'user',
         image: 'https://avatar.com',
         email: 'email@foo.com',
+        infoConfirmed: false,
       });
     });
   });
