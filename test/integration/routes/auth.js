@@ -94,6 +94,7 @@ describe('auth routes', () => {
         name: 'John',
         email: 'email@foo.com',
         image: 'https://acme.com/john.png',
+        infoConfirmed: false,
       });
     });
 
