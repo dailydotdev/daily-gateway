@@ -5,6 +5,7 @@ import knexCleaner from 'knex-cleaner';
 import db, { migrate } from '../../../src/db';
 import app from '../../../src';
 import role from '../../../src/models/role';
+import userModel from '../../../src/models/user';
 import { sign } from '../../../src/jwt';
 
 describe('users routes', () => {
@@ -187,6 +188,46 @@ describe('users routes', () => {
         .expect(200);
 
       expect(res.body).to.deep.equal(['admin', 'moderator']);
+    });
+  });
+
+  describe('update info', () => {
+    it('should update the logged-in user info', async () => {
+      await userModel.add('id', 'John');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer',
+        })
+        .expect(200);
+
+      expect(res.body).to.deep.equal({
+        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true,
+      });
+    });
+
+    it('should throw bad request on duplicate email', async () => {
+      await userModel.add('id', 'John');
+      await userModel.add('id2', 'John2', 'john@acme.com');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'email already exists',
+      });
     });
   });
 });

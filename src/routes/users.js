@@ -1,5 +1,9 @@
 import Router from 'koa-router';
-import { ForbiddenError } from '../errors';
+import validator, {
+  object,
+  string,
+} from 'koa-context-validator';
+import { ForbiddenError, ValidationError } from '../errors';
 import provider from '../models/provider';
 import userModel from '../models/user';
 import role from '../models/role';
@@ -7,6 +11,7 @@ import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { addSubdomainOpts } from '../cookies';
+import { updateUserContact } from '../mailing';
 
 const router = Router({
   prefix: '/users',
@@ -53,6 +58,43 @@ router.get(
     if (app === 'extension') {
       visit.upsert(visitId, app, new Date())
         .catch(err => ctx.log.error({ err }, `failed to update visit for ${visitId}`));
+    }
+  },
+);
+
+router.put(
+  '/me',
+  validator({
+    body: object().keys({
+      name: string().required(),
+      email: string().email().required(),
+      company: string(),
+      title: string(),
+    }),
+  }, { stripUnknown: true }),
+  async (ctx) => {
+    if (ctx.state.user) {
+      const { userId } = ctx.state.user;
+      const user = await userModel.getById(userId);
+      if (!user) {
+        throw new ForbiddenError();
+      }
+      const { body } = ctx.request;
+      const newProfile = Object.assign({}, user, body, { infoConfirmed: true });
+      const dup = await userModel.checkDuplicateEmail(userId, newProfile.email);
+      if (dup) {
+        throw new ValidationError('email', 'email already exists');
+      }
+      ctx.log.info(`updating profile for ${userId}`);
+      await userModel.update(userId, newProfile);
+      updateUserContact(newProfile, user.email)
+        .catch((err) => {
+          ctx.log.warn({ err }, `failed to update ${userId} to contact`);
+        });
+      ctx.body = newProfile;
+      ctx.status = 200;
+    } else {
+      throw new ForbiddenError();
     }
   },
 );

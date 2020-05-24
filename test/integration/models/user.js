@@ -39,9 +39,9 @@ describe('user model', () => {
   });
 
   it('should update user', async () => {
-    await user.add(fixture[0].id);
-    await user.update(fixture[0].id, fixture[0]);
-    const model = await user.getById(fixture[0].id);
-    expect(model).to.deep.equal(fixture[0]);
+    await user.add(fixture[2].id);
+    await user.update(fixture[2].id, fixture[2]);
+    const model = await user.getById(fixture[2].id);
+    expect(model).to.deep.equal(fixture[2]);
   });
 });

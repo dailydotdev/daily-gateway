@@ -4,25 +4,49 @@ if (process.env.SENDGRID_API_KEY) {
   client.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
-const profileToContact = (profile) => {
+const profileToContact = (profile, contactId) => {
   const contact = { email: profile.email, custom_fields: { e1_T: profile.id } };
   if (profile.name) {
     const split = profile.name.split(' ');
     [contact.first_name] = split;
     contact.last_name = split.slice(1).join(' ');
   }
+  if (contactId) {
+    contact.id = contactId;
+  }
   return contact;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export const addUserToContacts = (profile, lists) => {
+export const addUserToContacts = (profile, lists, contactId) => {
   const request = {
     method: 'PUT',
     url: '/v3/marketing/contacts',
     body: {
-      list_ids: [lists],
-      contacts: [profileToContact(profile)],
+      list_ids: lists ? [lists] : undefined,
+      contacts: [profileToContact(profile, contactId)],
     },
   };
   return client.request(request);
+};
+
+export const getContactIdByEmail = async (email) => {
+  if (email) {
+    const request = {
+      method: 'POST',
+      url: '/v3/marketing/contacts/search',
+      body: {
+        query: `email = '${email}'`,
+      },
+    };
+    const [, body] = await client.request(request);
+    if (body && body.result && body.result.length) {
+      return body.result[0].id;
+    }
+  }
+  return null;
+};
+
+export const updateUserContact = async (newProfile, oldEmail) => {
+  const contactId = await getContactIdByEmail(oldEmail);
+  return addUserToContacts(newProfile, undefined, contactId);
 };
