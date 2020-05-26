@@ -86,6 +86,7 @@ describe('users routes', () => {
         image: 'https://avatar.com',
         email: 'email@foo.com',
         infoConfirmed: false,
+        premium: false,
       });
     });
   });
@@ -207,7 +208,7 @@ describe('users routes', () => {
         .expect(200);
 
       expect(res.body).to.deep.equal({
-        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true,
+        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false,
       });
     });
 

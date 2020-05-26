@@ -35,13 +35,19 @@ describe('user model', () => {
       fixture[0].image,
     );
     const model = await user.getById(fixture[0].id);
-    expect(model).to.deep.equal(Object.assign({}, fixture[0], { infoConfirmed: false }));
+    expect(model).to.deep.equal(Object.assign({}, fixture[0], {
+      infoConfirmed: false,
+      premium: false,
+    }));
   });
 
   it('should update user', async () => {
     await user.add(fixture[2].id);
     await user.update(fixture[2].id, fixture[2]);
     const model = await user.getById(fixture[2].id);
-    expect(model).to.deep.equal(Object.assign({}, fixture[2], { infoConfirmed: false }));
+    expect(model).to.deep.equal(Object.assign({}, fixture[2], {
+      infoConfirmed: false,
+      premium: false,
+    }));
   });
 });

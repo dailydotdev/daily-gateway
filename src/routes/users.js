@@ -10,7 +10,7 @@ import role from '../models/role';
 import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
-import { addSubdomainOpts } from '../cookies';
+import { setAuthCookie } from '../cookies';
 import { updateUserContact } from '../mailing';
 
 const router = Router({
@@ -36,13 +36,7 @@ router.get(
       }
 
       // Refresh the auth cookie
-      const auth = ctx.cookies.get(config.cookies.auth.key);
-      if (auth) {
-        ctx.cookies.set(
-          config.cookies.auth.key, auth,
-          addSubdomainOpts(ctx, config.cookies.auth.opts),
-        );
-      }
+      await setAuthCookie(ctx, user);
 
       ctx.status = 200;
       ctx.body = Object.assign({}, user, { providers: [userProvider.provider] });

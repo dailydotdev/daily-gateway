@@ -25,9 +25,6 @@ app.keys = [config.cookies.secret];
 
 app.proxy = config.env === 'production';
 
-// TODO: disabled due to performance issues
-// app.use(compress());
-
 const allowedOrigins = config.cors.origin.split(',');
 
 app.use(cors({
@@ -48,6 +45,7 @@ app.use(async (ctx, next) => {
   const cookie = ctx.cookies.get(config.cookies.auth.key);
   if (!ctx.state.user && cookie) {
     ctx.state.user = await verifyJwt(cookie);
+    console.log(ctx.state.user);
   }
   return next();
 });
@@ -61,12 +59,14 @@ app.use((ctx, next) => {
     ctx.state = {
       user: {
         userId: ctx.request.get('user-id'),
+        premium: ctx.request.get('premium'),
       },
       service: true,
     };
   } else {
     delete ctx.request.headers['user-id'];
     delete ctx.request.headers['logged-in'];
+    delete ctx.request.headers.premium;
   }
   return next();
 });
@@ -80,6 +80,7 @@ app.use((ctx, next) => {
   if (ctx.state.user && ctx.state.user.userId) {
     ctx.request.headers['logged-in'] = true;
     ctx.request.headers['user-id'] = ctx.state.user.userId;
+    ctx.request.headers.premium = ctx.state.user.premium;
   }
   return next();
 });

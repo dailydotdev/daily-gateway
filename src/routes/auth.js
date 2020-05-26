@@ -12,7 +12,7 @@ import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
 import { addUserToContacts } from '../mailing';
-import { addSubdomainOpts } from '../cookies';
+import { setAuthCookie } from '../cookies';
 
 const router = Router({
   prefix: '/auth',
@@ -175,11 +175,7 @@ router.post(
   }),
   async (ctx) => {
     const user = await authenticate(ctx, () => `${ctx.request.origin}/v1/auth/callback`);
-    const accessToken = await signJwt({ userId: user.id }, null);
-    ctx.cookies.set(
-      config.cookies.auth.key, accessToken.token,
-      addSubdomainOpts(ctx, config.cookies.auth.opts),
-    );
+    await setAuthCookie(ctx, user);
 
     ctx.log.info(`connected ${user.id} with ${user.providers[0]}`);
     ctx.status = 200;

@@ -3,11 +3,14 @@ import db, { toCamelCase, toSnakeCase } from '../db';
 
 const table = 'users';
 
-const select = () => db.select('id', 'name', 'email', 'image', 'company', 'title', 'info_confirmed').from(table);
+const select = () => db.select('id', 'name', 'email', 'image', 'company', 'title', 'info_confirmed', 'premium').from(table);
 
 const mapUser = (user) => {
   const obj = _.omitBy(toCamelCase(user), _.isNull);
-  return Object.assign({}, obj, { infoConfirmed: obj.infoConfirmed === 1 });
+  return Object.assign({}, obj, {
+    infoConfirmed: obj.infoConfirmed === 1,
+    premium: obj.premium === 1,
+  });
 };
 
 const getById = id =>
