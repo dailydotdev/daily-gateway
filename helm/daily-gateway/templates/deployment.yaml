@@ -156,6 +156,26 @@ spec:
               secretKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: SENDGRID_API_KEY
+          - name: BLUESNAP_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: BLUESNAP_API_KEY
+          - name: BLUESNAP_API_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: BLUESNAP_API_URL
+          - name: BLUESNAP_CHECKOUT_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: BLUESNAP_CHECKOUT_URL
+          - name: BLUESNAP_STORE_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: BLUESNAP_STORE_ID
           volumeMounts:
           - name: config
             mountPath: "/etc/config"

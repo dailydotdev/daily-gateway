@@ -3,7 +3,6 @@ import bodyParser from 'koa-bodyparser';
 import KoaPinoLogger from 'koa-pino-logger';
 import Router from 'koa-router';
 import userAgent from 'koa-useragent';
-import etag from 'koa-etag';
 import cors from '@koa/cors';
 import proxy from 'koa-proxies';
 
@@ -18,6 +17,7 @@ import health from './routes/health';
 import redirects from './routes/redirects';
 import users from './routes/users';
 import auth from './routes/auth';
+import premium from './routes/premium';
 
 const app = new Koa();
 
@@ -88,13 +88,13 @@ const router = new Router({
   prefix: '/v1',
 });
 
-router.use(etag());
 router.use(bodyParser());
 router.use(users.routes(), users.allowedMethods());
 router.use(auth.routes(), auth.allowedMethods());
 
 app.use(router.routes(), router.allowedMethods());
 app.use(redirects.routes(), redirects.allowedMethods());
+app.use(premium.routes(), premium.allowedMethods());
 
 app.use(proxy('/r', {
   target: config.redirectorUrl,

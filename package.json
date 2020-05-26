@@ -34,7 +34,6 @@
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.0",
     "koa-context-validator": "^0.4.1",
-    "koa-etag": "^3.0.0",
     "koa-jwt": "^3.3.2",
     "koa-pino-logger": "^2.1.1",
     "koa-proxies": "^0.8.1",

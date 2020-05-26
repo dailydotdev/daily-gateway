@@ -74,6 +74,12 @@ const config = {
     issuer: process.env.JWT_ISSUER,
     expiresIn: 30 * 24 * 60 * 60 * 1000,
   },
+  bluesnap: {
+    apiKey: process.env.BLUESNAP_API_KEY,
+    apiUrl: process.env.BLUESNAP_API_URL,
+    checkoutUrl: process.env.BLUESNAP_CHECKOUT_URL,
+    storeId: process.env.BLUESNAP_STORE_ID,
+  },
   monetizationUrl: process.env.MONETIZATION_URL || 'http://localhost:9090',
   redirectorUrl: process.env.REDIRECTOR_URL || 'http://localhost:9090',
   besticonUrl: process.env.BESTICON_URL || 'http://localhost:8080',
