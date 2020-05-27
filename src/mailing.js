@@ -5,11 +5,14 @@ if (process.env.SENDGRID_API_KEY) {
 }
 
 const profileToContact = (profile, contactId) => {
-  const contact = { email: profile.email, custom_fields: { e1_T: profile.id } };
-  if (profile.name) {
-    const split = profile.name.split(' ');
-    [contact.first_name] = split;
-    contact.last_name = split.slice(1).join(' ');
+  let contact = {};
+  if (profile) {
+    contact = { email: profile.email, custom_fields: { e1_T: profile.id } };
+    if (profile.name) {
+      const split = profile.name.split(' ');
+      [contact.first_name] = split;
+      contact.last_name = split.slice(1).join(' ');
+    }
   }
   if (contactId) {
     contact.id = contactId;
@@ -25,6 +28,14 @@ export const addUserToContacts = (profile, lists, contactId) => {
       list_ids: lists ? [lists] : undefined,
       contacts: [profileToContact(profile, contactId)],
     },
+  };
+  return client.request(request);
+};
+
+export const removeUserFromList = (list, contactId) => {
+  const request = {
+    method: 'DELETE',
+    url: `/v3/marketing/lists/${list}/contacts?contact_ids=${contactId}`,
   };
   return client.request(request);
 };

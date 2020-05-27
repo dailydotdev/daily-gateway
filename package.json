@@ -10,7 +10,7 @@
   "scripts": {
     "mocha": "NODE_ENV=test mocha",
     "lint": "eslint . --ext .js",
-    "test": "yarn run lint && yarn run mocha",
+    "test": "yarn run lint && BLUESNAP_IP='123.1.1.1,123.2.2.2' yarn run mocha",
     "build": "babel . -d build --source-maps --ignore build,node_modules,test && cp package.json yarn.lock ./build",
     "babel-node": "babel-node",
     "watch": "nodemon --exec yarn run babel-node -- $npm_package_main | pino",

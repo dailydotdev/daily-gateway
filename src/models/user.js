@@ -49,7 +49,7 @@ const add = (id, name, email, image) => {
 const update = (id, user) =>
   db(table)
     .where('id', '=', id)
-    .update(toSnakeCase(Object.assign({}, _.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed']), { updatedAt: new Date() })));
+    .update(toSnakeCase(Object.assign({}, _.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed', 'premium']), { updatedAt: new Date() })));
 
 export default {
   getById,

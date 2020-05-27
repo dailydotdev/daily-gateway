@@ -79,6 +79,7 @@ const config = {
     apiUrl: process.env.BLUESNAP_API_URL,
     checkoutUrl: process.env.BLUESNAP_CHECKOUT_URL,
     storeId: process.env.BLUESNAP_STORE_ID,
+    ip: process.env.BLUESNAP_IP,
   },
   monetizationUrl: process.env.MONETIZATION_URL || 'http://localhost:9090',
   redirectorUrl: process.env.REDIRECTOR_URL || 'http://localhost:9090',

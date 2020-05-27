@@ -23,7 +23,7 @@ const app = new Koa();
 
 app.keys = [config.cookies.secret];
 
-app.proxy = config.env === 'production';
+app.proxy = true;
 
 const allowedOrigins = config.cors.origin.split(',');
 
@@ -84,11 +84,14 @@ app.use((ctx, next) => {
   return next();
 });
 
+app.use(bodyParser({
+  enableTypes: ['json', 'form', 'text'],
+}));
+
 const router = new Router({
   prefix: '/v1',
 });
 
-router.use(bodyParser());
 router.use(users.routes(), users.allowedMethods());
 router.use(auth.routes(), auth.allowedMethods());
 
