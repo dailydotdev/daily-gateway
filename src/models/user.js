@@ -33,12 +33,13 @@ const checkDuplicateEmail = (id, email) =>
       return res.findIndex(u => u.id === id) < 0;
     });
 
-const add = (id, name, email, image) => {
+const add = (id, name, email, image, referral = null) => {
   const obj = {
     id,
     name,
     email,
     image,
+    referral,
   };
   return db.insert(toSnakeCase(Object.assign({
     createdAt: new Date(),

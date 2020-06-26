@@ -106,13 +106,19 @@ const authenticate = async (ctx, redirectUriFunc) => {
     const userId = getTrackingId(ctx);
     const hasEmail = profile.email && profile.email.indexOf('users.noreply.github.com') < 0;
     [user] = await Promise.all([
-      userModel.add(userId, profile.name, hasEmail ? profile.email : undefined, profile.image),
+      userModel.add(
+        userId, profile.name, hasEmail ? profile.email : undefined, profile.image,
+        ctx.cookies.get(config.cookies.referral.key, config.cookies.referral.opts),
+      ),
       provider.add(
         userId, providerName, res.access_token, profile.id,
         res.expires_in ? (new Date(Date.now() + (res.expires_in * 1000))) : null,
         res.refresh_token,
       ),
     ]);
+    if (user.referral) {
+      ctx.log.info({ userId: user.id, referral: user.referral }, 'referred user registered');
+    }
     notifyNewUser(profile, providerName);
     if (hasEmail) {
       addUserToContacts(Object.assign({}, profile, { id: userId }), '85a1951f-5f0c-459f-bf5e-e5c742986a50')

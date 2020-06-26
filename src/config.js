@@ -50,6 +50,17 @@ const config = {
       },
       key: 'da3',
     },
+    referral: {
+      opts: {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        overwrite: true,
+        httpOnly: true,
+        signed: false,
+        secure: env === 'production',
+        sameSite: 'lax',
+      },
+      key: 'da4',
+    },
   },
   cors: {
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN : '*',
