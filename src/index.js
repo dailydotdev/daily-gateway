@@ -17,7 +17,7 @@ import redirects from './routes/redirects';
 import users from './routes/users';
 import auth from './routes/auth';
 import premium from './routes/premium';
-import contests from './routes/contests';
+import contests from './routes/referrals';
 
 const app = new Koa();
 

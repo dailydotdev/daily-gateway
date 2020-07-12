@@ -29,6 +29,7 @@
     "@google-cloud/trace-agent": "^3.6.1",
     "@koa/cors": "2",
     "@sendgrid/client": "^6.4.0",
+    "@sendgrid/mail": "^7.2.1",
     "@slack/client": "^4.3.1",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.19.5",

@@ -80,7 +80,7 @@ const boardFixture = [
   },
 ];
 
-describe('contests routes', () => {
+describe('referrals routes', () => {
   let request;
   let server;
 
@@ -103,11 +103,20 @@ describe('contests routes', () => {
     server.close();
   });
 
+  it('should return referral link of logged in user', async () => {
+    const accessToken = await signJwt({ userId: '1' });
+    const res = await request
+      .get('/v1/referrals/link')
+      .set('Authorization', `Bearer ${accessToken.token}`)
+      .expect(200);
+    expect(res.body.link).to.deep.equal('https://app.dailynow.co/get?r=1');
+  });
+
   it('should return leaderboard and rank of logged in user', async () => {
     const accessToken = await signJwt({ userId: '2' });
     const clock = sinon.useFakeTimers(fixture[0].startAt);
     const res = await request
-      .get('/v1/contests')
+      .get('/v1/referrals/contests')
       .set('Authorization', `Bearer ${accessToken.token}`)
       .expect(200);
     clock.restore();
@@ -152,10 +161,11 @@ describe('contests routes', () => {
   it('should return leaderboard', async () => {
     const clock = sinon.useFakeTimers(fixture[0].startAt);
     const res = await request
-      .get('/v1/contests')
+      .get('/v1/referrals/contests')
       .expect(200);
     clock.restore();
 
+    delete res.body.referralLink;
     expect(res.body).to.deep.equal({
       ongoing: {
         startAt: '2020-07-11T00:00:00.000Z',
@@ -186,7 +196,6 @@ describe('contests routes', () => {
         },
       ],
       me: null,
-      referralLink: null,
     });
   });
 });

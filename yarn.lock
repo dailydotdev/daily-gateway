@@ -943,6 +943,14 @@
     "@types/request" "^2.48.4"
     request "^2.88.0"
 
+"@sendgrid/client@^7.2.1":
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.2.1.tgz#9d631a3d2ed44f06a08dee9730da7755eb72fb3c"
+  integrity sha512-QizSa+qKnq5xquMyeB2x0l2JNH3jvg3zHmGt0Ghz+DLUGpW8i1m/zvrqSZ0wdcGVO4/2lW3WFN0drv1+jOxVgA==
+  dependencies:
+    "@sendgrid/helpers" "^7.2.0"
+    axios "^0.19.2"
+
 "@sendgrid/helpers@^6.5.5":
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-6.5.5.tgz#de6de9b94794fbf834b4f66a7d44af84bf736459"
@@ -950,6 +958,22 @@
   dependencies:
     chalk "^2.0.1"
     deepmerge "^4.2.2"
+
+"@sendgrid/helpers@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.2.0.tgz#75cbde76815fa0f8b7966b3e2a0650fc125c3276"
+  integrity sha512-Ps8rc3xFpaQvIWoW1zlWi9G7QnxYwXFOeq0915DzXf5knoiOgXdFk/XBXbCFjr2lf/JIzjgFUtAV/dN8Z8jzHw==
+  dependencies:
+    chalk "^2.0.1"
+    deepmerge "^4.2.2"
+
+"@sendgrid/mail@^7.2.1":
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.2.1.tgz#4e1d9cb84406a2b8ed6db3ddf8cba9d17e6badd0"
+  integrity sha512-LBAdwL+c6HmN2B/Q24LFy2do/IzBFeFoF05xBqgELxp8lMUwis4fbqgo09Zyj1CY0qHN+CfWcUfLNvHfVCh8oQ==
+  dependencies:
+    "@sendgrid/client" "^7.2.1"
+    "@sendgrid/helpers" "^7.2.0"
 
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.0.2":
   version "1.4.0"
@@ -1415,6 +1439,13 @@ axios@^0.18.0:
   dependencies:
     follow-redirects "1.5.10"
     is-buffer "^2.0.2"
+
+axios@^0.19.2:
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+  dependencies:
+    follow-redirects "1.5.10"
 
 babel-plugin-dynamic-import-node@^2.3.0:
   version "2.3.0"
