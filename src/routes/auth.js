@@ -33,7 +33,6 @@ const validateRedirectUri = (redirectUri) => {
 
 const authorize = (ctx, providerName, redirectUri) => {
   const { query, origin, url: reqUrl } = ctx.request;
-  const state = { ...query };
   if (origin !== config.primaryAuthOrigin) {
     ctx.status = 307;
     ctx.redirect(`${config.primaryAuthOrigin}${reqUrl}`);
@@ -42,7 +41,7 @@ const authorize = (ctx, providerName, redirectUri) => {
 
   validateRedirectUri(query.redirect_uri);
   const providerConfig = providersConfig[providerName];
-  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(JSON.stringify(state))}`;
+  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(JSON.stringify(query))}`;
 
   ctx.status = 307;
   ctx.redirect(url);
