@@ -14,4 +14,5 @@ data:
   API_URL: {{ .Values.appConfig.apiUrl }}
   SCRAPER_URL: {{ .Values.appConfig.scraperUrl }}
   BESTICON_URL: {{ .Values.appConfig.besticonUrl }}
+  PRIMARY_AUTH_ORIGIN: {{ .Values.appConfig.primaryAuthOrigin }}
 
