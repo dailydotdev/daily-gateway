@@ -1,4 +1,4 @@
-import uuid4 from 'uuid/v4';
+import shortid from 'shortid';
 import config from './config';
 import { addSubdomainOpts } from './cookies';
 
@@ -25,7 +25,7 @@ export default function (ctx, next) {
       // eslint-disable-next-line prefer-destructuring
       userId = ctx.state.user.userId;
     } else if (!userId || !userId.length) {
-      userId = uuid4().replace(/-/g, '');
+      userId = shortid.generate();
     }
 
     if (userId !== getTrackingId(ctx)) {
