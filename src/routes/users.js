@@ -11,7 +11,7 @@ import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { setAuthCookie, addSubdomainOpts } from '../cookies';
-import {publishEvent, userUpdatedTopic} from '../pubsub';
+import { publishEvent, userUpdatedTopic } from '../pubsub';
 
 const router = Router({
   prefix: '/users',

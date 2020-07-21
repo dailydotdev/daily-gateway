@@ -1,4 +1,4 @@
-import {pubsub} from '../pubsub';
+import { pubsub } from '../pubsub';
 import slackNotification from './slackNotification';
 import addToMailingList from './addToMailingList';
 import updateMailingList from './updateMailingList';
@@ -13,6 +13,7 @@ const initializeWorker = async (worker, log) => {
   subscription.on('message', message => worker.handler(message, log));
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const startWorkers = async (log) => {
   await initializeWorker(slackNotification, log);
   await initializeWorker(addToMailingList, log);

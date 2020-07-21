@@ -1,5 +1,5 @@
-import {envBasedName, messageToJson, userUpdatedTopic} from '../pubsub';
-import {updateUserContact} from '../mailing';
+import { envBasedName, messageToJson, userUpdatedTopic } from '../pubsub';
+import { updateUserContact } from '../mailing';
 
 const worker = {
   topic: userUpdatedTopic.name,

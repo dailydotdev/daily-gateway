@@ -1,5 +1,5 @@
-import {envBasedName, messageToJson, userRegisteredTopic} from '../pubsub';
-import {notifyNewUser} from '../slack';
+import { envBasedName, messageToJson, userRegisteredTopic } from '../pubsub';
+import { notifyNewUser } from '../slack';
 
 const worker = {
   topic: userRegisteredTopic.name,

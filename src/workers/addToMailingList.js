@@ -1,5 +1,5 @@
-import {envBasedName, messageToJson, userRegisteredTopic} from '../pubsub';
-import {addUserToContacts} from '../mailing';
+import { envBasedName, messageToJson, userRegisteredTopic } from '../pubsub';
+import { addUserToContacts } from '../mailing';
 
 const worker = {
   topic: userRegisteredTopic.name,
@@ -8,7 +8,7 @@ const worker = {
     const data = messageToJson(message);
     try {
       if (data.email) {
-        await addUserToContacts(Object.assign({}, data, { id: data.id }), '85a1951f-5f0c-459f-bf5e-e5c742986a50')
+        await addUserToContacts(Object.assign({}, data, { id: data.id }), '85a1951f-5f0c-459f-bf5e-e5c742986a50');
       }
       message.ack();
     } catch (err) {

@@ -19,4 +19,4 @@ export const publishEvent = async (topic, payload, log) => {
       log.error({ payload, topic: topic.name, err }, 'failed to publish message');
     }
   }
-}
+};

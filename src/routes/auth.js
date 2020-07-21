@@ -11,7 +11,7 @@ import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
 import { setAuthCookie } from '../cookies';
-import {publishEvent, userRegisteredTopic} from '../pubsub';
+import { publishEvent, userRegisteredTopic } from '../pubsub';
 
 const router = Router({
   prefix: '/auth',

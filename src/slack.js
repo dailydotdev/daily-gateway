@@ -4,7 +4,7 @@ const webhook = (process.env.SLACK_WEBHOOK && process.env.NODE_ENV === 'producti
   new IncomingWebhook(process.env.SLACK_WEBHOOK) : { send: () => Promise.resolve() };
 
 // eslint-disable-next-line import/prefer-default-export
-export const notifyNewUser = (user) =>
+export const notifyNewUser = user =>
   webhook.send({
     text: 'Daily just got a new user!',
     attachments: [{
