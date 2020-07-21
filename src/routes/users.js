@@ -11,7 +11,7 @@ import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { setAuthCookie, addSubdomainOpts } from '../cookies';
-import { updateUserContact } from '../mailing';
+import {publishEvent, userUpdatedTopic} from '../pubsub';
 
 const router = Router({
   prefix: '/users',
@@ -84,10 +84,7 @@ router.put(
       }
       ctx.log.info(`updating profile for ${userId}`);
       await userModel.update(userId, newProfile);
-      updateUserContact(newProfile, user.email)
-        .catch((err) => {
-          ctx.log.warn({ err }, `failed to update ${userId} to contact`);
-        });
+      await publishEvent(userUpdatedTopic, { user, newProfile });
       ctx.body = newProfile;
       ctx.status = 200;
     } else {

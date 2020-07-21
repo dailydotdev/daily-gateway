@@ -7,12 +7,11 @@ import refreshToken from '../models/refreshToken';
 import userModel from '../models/user';
 import { fetchProfile } from '../profile';
 import { sign as signJwt, verify as verifyJwt } from '../jwt';
-import { notifyNewUser } from '../slack';
 import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
-import { addUserToContacts } from '../mailing';
 import { setAuthCookie } from '../cookies';
+import {publishEvent, userRegisteredTopic} from '../pubsub';
 
 const router = Router({
   prefix: '/auth',
@@ -126,13 +125,7 @@ const authenticate = async (ctx, redirectUriFunc) => {
     if (user.referral) {
       ctx.log.info({ userId: user.id, referral: user.referral }, 'referred user registered');
     }
-    notifyNewUser(profile, providerName);
-    if (hasEmail) {
-      addUserToContacts(Object.assign({}, profile, { id: userId }), '85a1951f-5f0c-459f-bf5e-e5c742986a50')
-        .catch((err) => {
-          ctx.log.warn({ err }, `failed to add ${userId} to contacts`);
-        });
-    }
+    await publishEvent(userRegisteredTopic, user, ctx.log);
   }
 
   return Object.assign({}, user, {

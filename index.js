@@ -4,9 +4,11 @@ import logger from './src/logger';
 import app from './src/index';
 import config from './src/config';
 import { migrate } from './src/db';
+import {startWorkers} from './src/workers';
 
 logger.info('migrating database');
 migrate()
+  .then(() => startWorkers(logger))
   .then(() => {
     const server = app.listen(config.port);
 
