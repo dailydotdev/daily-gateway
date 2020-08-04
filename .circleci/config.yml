@@ -97,7 +97,7 @@ jobs:
             - helm/values
   deploy_helm:
     docker:
-      - image: google/cloud-sdk:alpine
+      - image: google/cloud-sdk:slim
     steps:
       - checkout
       - attach_workspace:
