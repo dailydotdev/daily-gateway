@@ -98,7 +98,7 @@ jobs:
   deploy_helm:
     docker:
       - image: google/cloud-sdk
-      - user: root
+        user: root
     steps:
       - checkout
       - attach_workspace:
