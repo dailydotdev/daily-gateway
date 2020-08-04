@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.0
   helm: circleci/helm@1.0.0
-  gcp-cli: circleci/gcp-cli@1.8.1
+  gcp-cli: circleci/gcp-cli@1.8.4
 
 jobs:
   build:
@@ -23,34 +23,34 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
-      - run:
-          name: Wait for MySQL
-          command: |
-            for i in `seq 1 10`;
-            do
-            nc -z localhost 3306 && echo Success && exit 0
-            echo -n .
-            sleep 1
-            done
-            echo Failed waiting for Postgress && exit 1
-      - run:
-          name: Test
-          command: yarn test --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: ./test-results/mocha/results.xml
-            MYSQL_HOST: localhost
-            MYSQL_USER: root
-            MYSQL_PASSWORD: 12345
-            MYSQL_DATABASE: test
-            NODE_ENV: test
-            JWT_SECRET: 1234567890
-            JWT_AUDIENCE: Daily Testing
-            JWT_ISSUER: Daily API Testing
-            COOKIES_KEY: topsecret
-      - store_test_results:
-          path: ./test-results
-      - store_artifacts:
-          path: ./test-results
+#      - run:
+#          name: Wait for MySQL
+#          command: |
+#            for i in `seq 1 10`;
+#            do
+#            nc -z localhost 3306 && echo Success && exit 0
+#            echo -n .
+#            sleep 1
+#            done
+#            echo Failed waiting for Postgress && exit 1
+#      - run:
+#          name: Test
+#          command: yarn test --reporter mocha-junit-reporter
+#          environment:
+#            MOCHA_FILE: ./test-results/mocha/results.xml
+#            MYSQL_HOST: localhost
+#            MYSQL_USER: root
+#            MYSQL_PASSWORD: 12345
+#            MYSQL_DATABASE: test
+#            NODE_ENV: test
+#            JWT_SECRET: 1234567890
+#            JWT_AUDIENCE: Daily Testing
+#            JWT_ISSUER: Daily API Testing
+#            COOKIES_KEY: topsecret
+#      - store_test_results:
+#          path: ./test-results
+#      - store_artifacts:
+#          path: ./test-results
       - run:
           name: Build
           command: yarn build
@@ -97,7 +97,7 @@ jobs:
             - helm/values
   deploy_helm:
     docker:
-      - image: google/cloud-sdk
+      - image: google/cloud-sdk:alpine
     steps:
       - checkout
       - attach_workspace:
@@ -130,10 +130,10 @@ workflows:
             - secrets
             - build_and_push_docker
           context: PROD
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
       - gcp-gcr/add-image-tag:
           requires:
             - build_and_push_docker
