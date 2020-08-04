@@ -97,16 +97,18 @@ jobs:
             - helm/values
   deploy_helm:
     docker:
-      - image: alpine/helm:2.16.9
+      - image: google/cloud-sdk
+      - user: root
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - gcp-cli/install
       - gcp-cli/initialize
       - run:
           name: Get cluster credentials
           command: gcloud container clusters get-credentials prod
+      - helm/install-helm-client:
+          version: v2.16.9
       - run:
           name: Update Helm release
           command: helm upgrade $CIRCLE_PROJECT_REPONAME ./helm/$CIRCLE_PROJECT_REPONAME --namespace daily -f ./helm/values/prod.yaml --set-string image.tag=$CIRCLE_SHA1 -i
