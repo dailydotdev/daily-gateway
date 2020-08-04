@@ -122,10 +122,10 @@ workflows:
           context: GCR
       - secrets:
           context: GPG
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
       - deploy_helm:
           requires:
             - secrets
