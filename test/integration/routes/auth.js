@@ -96,6 +96,7 @@ describe('auth routes', () => {
         image: 'https://acme.com/john.png',
         infoConfirmed: false,
         premium: false,
+        acceptedMarketing: false,
       });
     });
 

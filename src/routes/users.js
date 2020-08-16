@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import validator, {
   object,
   string,
+  boolean,
 } from 'koa-context-validator';
 import { ForbiddenError, ValidationError } from '../errors';
 import provider from '../models/provider';
@@ -67,6 +68,7 @@ router.put(
       email: string().email().required(),
       company: string().allow(null),
       title: string().allow(null),
+      acceptedMarketing: boolean(),
     }),
   }, { stripUnknown: true }),
   async (ctx) => {
@@ -77,7 +79,13 @@ router.put(
         throw new ForbiddenError();
       }
       const { body } = ctx.request;
-      const newProfile = Object.assign({}, user, body, { infoConfirmed: true });
+      const newProfile = Object.assign(
+        {},
+        user,
+        { acceptedMarketing: true },
+        body,
+        { infoConfirmed: true },
+      );
       const dup = await userModel.checkDuplicateEmail(userId, newProfile.email);
       if (dup) {
         throw new ValidationError('email', 'email already exists');

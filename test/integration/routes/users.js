@@ -87,6 +87,7 @@ describe('users routes', () => {
         email: 'email@foo.com',
         infoConfirmed: false,
         premium: false,
+        acceptedMarketing: false,
       });
     });
   });
@@ -208,7 +209,25 @@ describe('users routes', () => {
         .expect(200);
 
       expect(res.body).to.deep.equal({
-        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false,
+        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false, acceptedMarketing: true,
+      });
+    });
+
+    it('should update the accepted marketing field', async () => {
+      await userModel.add('id', 'John');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', acceptedMarketing: false,
+        })
+        .expect(200);
+
+      expect(res.body).to.deep.equal({
+        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false, acceptedMarketing: false,
       });
     });
 

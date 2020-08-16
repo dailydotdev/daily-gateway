@@ -40,6 +40,14 @@ export const removeUserFromList = (list, contactId) => {
   return client.request(request);
 };
 
+export const removeUserContact = (contactId) => {
+  const request = {
+    method: 'DELETE',
+    url: `/v3/marketing/contacts?ids=${contactId}`,
+  };
+  return client.request(request);
+};
+
 export const getContactIdByEmail = async (email) => {
   if (email) {
     const request = {
