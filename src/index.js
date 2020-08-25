@@ -131,6 +131,12 @@ app.use(proxy('/scrape', {
   },
 }));
 
+app.use(proxy('/graphql', {
+  target: config.apiUrl,
+  changeOrigin: true,
+  xfwd: true,
+}));
+
 app.use(proxy('/', {
   target: config.apiUrl,
   changeOrigin: true,
