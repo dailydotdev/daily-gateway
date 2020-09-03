@@ -65,7 +65,7 @@ export const getContactIdByEmail = async (email) => {
   return null;
 };
 
-export const updateUserContact = async (newProfile, oldEmail) => {
+export const updateUserContact = async (newProfile, oldEmail, list) => {
   const contactId = await getContactIdByEmail(oldEmail);
-  return addUserToContacts(newProfile, undefined, contactId);
+  return addUserToContacts(newProfile, list, contactId);
 };

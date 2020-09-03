@@ -13,7 +13,7 @@ const worker = {
           await removeUserContact(contactId);
         }
       } else {
-        await updateUserContact(data.newProfile, data.user.email);
+        await updateUserContact(data.newProfile, data.user.email, '85a1951f-5f0c-459f-bf5e-e5c742986a50');
       }
       message.ack();
     } catch (err) {
