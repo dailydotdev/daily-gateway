@@ -53,9 +53,15 @@ const update = (id, user) =>
     .where('id', '=', id)
     .update(toSnakeCase(Object.assign({}, _.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed', 'premium', 'acceptedMarketing']), { updatedAt: new Date() })));
 
+const updateReputation = (id, reputation) =>
+  db(table)
+    .where('id', '=', id)
+    .update({ reputation });
+
 export default {
   getById,
   checkDuplicateEmail,
   add,
   update,
+  updateReputation,
 };

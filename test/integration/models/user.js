@@ -52,4 +52,15 @@ describe('user model', () => {
       acceptedMarketing: true,
     }));
   });
+
+  it('should update user reputation', async () => {
+    await user.add(fixture[2].id);
+    await user.updateReputation(fixture[2].id, 2);
+    const model = await db
+      .select('reputation')
+      .from('users')
+      .where('id', '=', fixture[2].id)
+      .limit(1);
+    expect(model[0].reputation).to.deep.equal(2);
+  });
 });
