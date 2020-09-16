@@ -1,6 +1,7 @@
 import { pubsub } from '../pubsub';
 import slackNotification from './slackNotification';
 import updateMailingList from './updateMailingList';
+import updateReputation from './updateReputation';
 
 const initializeWorker = async (worker, log) => {
   const topic = pubsub.topic(worker.topic);
@@ -16,4 +17,5 @@ const initializeWorker = async (worker, log) => {
 export const startWorkers = async (log) => {
   await initializeWorker(slackNotification, log);
   await initializeWorker(updateMailingList, log);
+  await initializeWorker(updateReputation, log);
 };
