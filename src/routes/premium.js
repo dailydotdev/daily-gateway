@@ -10,14 +10,14 @@ const router = Router({
   prefix: '/premium',
 });
 
-const encryptParamXml = param => `
+const encryptParamXml = (param) => `
 <parameter>
 <param-key>${param.key}</param-key>
 <param-value>${param.value}</param-value>
 </parameter>
 `;
 
-const encryptParamsXml = params => `
+const encryptParamsXml = (params) => `
 <param-encryption xmlns="http://ws.plimus.com">
   <parameters>
     ${params.map(encryptParamXml).join('')}

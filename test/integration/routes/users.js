@@ -29,7 +29,7 @@ describe('users routes', () => {
   describe('me', () => {
     it('should return github profile', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -94,7 +94,7 @@ describe('users routes', () => {
 
     it('should return profile with roles', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -164,7 +164,7 @@ describe('users routes', () => {
   describe('me info', () => {
     it('should return github profile', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -224,7 +224,7 @@ describe('users routes', () => {
   describe('me roles', () => {
     it('should return user\'s roles', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {

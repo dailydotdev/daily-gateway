@@ -191,6 +191,11 @@ spec:
               configMapKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: PRIMARY_AUTH_ORIGIN
+          - name: CLOUDINARY_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: CLOUDINARY_URL
           volumeMounts:
           - name: config
             mountPath: "/etc/config"

@@ -3,15 +3,14 @@ import db, { toCamelCase, toSnakeCase } from '../db';
 
 const table = 'refresh_tokens';
 
-const generate = userId => `${userId}.${crypto.randomBytes(40).toString('hex')}`;
+const generate = (userId) => `${userId}.${crypto.randomBytes(40).toString('hex')}`;
 
-const getByToken = token =>
-  db.select('user_id', 'token')
-    .from(table)
-    .where('token', '=', token)
-    .limit(1)
-    .map(toCamelCase)
-    .then(res => (res.length ? res[0] : null));
+const getByToken = (token) => db.select('user_id', 'token')
+  .from(table)
+  .where('token', '=', token)
+  .limit(1)
+  .map(toCamelCase)
+  .then((res) => (res.length ? res[0] : null));
 
 const add = (userId, token) => {
   const obj = {
@@ -19,9 +18,7 @@ const add = (userId, token) => {
     token,
   };
 
-  return db.insert(toSnakeCase(Object.assign({
-    createdAt: new Date(),
-  }, obj))).into(table).then(() => obj);
+  return db.insert(toSnakeCase({ createdAt: new Date(), ...obj })).into(table).then(() => obj);
 };
 
 export default {

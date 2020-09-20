@@ -53,7 +53,7 @@ describe('auth routes', () => {
 
     it('should register a new user', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -102,7 +102,7 @@ describe('auth routes', () => {
 
     it('should login the existing in user', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -136,7 +136,7 @@ describe('auth routes', () => {
         .expect(200);
 
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token2' });
 
       nock('https://api.github.com', {
@@ -184,7 +184,7 @@ describe('auth routes', () => {
 
     it('should register a new user', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -219,7 +219,7 @@ describe('auth routes', () => {
 
     it('should login the existing in user', async () => {
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token' });
 
       nock('https://api.github.com', {
@@ -248,7 +248,7 @@ describe('auth routes', () => {
         .expect(200);
 
       nock('https://github.com')
-        .post('/login/oauth/access_token', body => body.code === 'code')
+        .post('/login/oauth/access_token', (body) => body.code === 'code')
         .reply(200, { access_token: 'token2' });
 
       nock('https://api.github.com', {

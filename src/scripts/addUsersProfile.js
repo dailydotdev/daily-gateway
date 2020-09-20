@@ -2,7 +2,9 @@
 
 import db, { toCamelCase } from '../db';
 import userModel from '../models/user';
-import { fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleToken } from '../profile';
+import {
+  fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleToken,
+} from '../profile';
 
 const fetchGithub = async (accessToken) => {
   const [profile, emails] = await Promise.all([
@@ -40,19 +42,18 @@ const fetchInfos = async (users, info) => {
 
   const parallel = 50;
   const runUsers = users.slice(0, parallel);
-  const newInfo = (await Promise.all(runUsers.map(u =>
-    fetchInfo(u)
-      .then((p) => {
-        if (p) {
-          return userModel.update(u.userId, p);
-        }
-        return Promise.resolve();
-      })
-      .catch((e) => {
-        if (e.statusCode !== 400 && e.statusCode !== 401) {
-          console.error(e);
-        }
-      }))));
+  const newInfo = (await Promise.all(runUsers.map((u) => fetchInfo(u)
+    .then((p) => {
+      if (p) {
+        return userModel.update(u.userId, p);
+      }
+      return Promise.resolve();
+    })
+    .catch((e) => {
+      if (e.statusCode !== 400 && e.statusCode !== 401) {
+        console.error(e);
+      }
+    }))));
   console.log(`next batch, users left: ${users.length}`);
   return fetchInfos(users.slice(parallel), info.concat(newInfo));
 };

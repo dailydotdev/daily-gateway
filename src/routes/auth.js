@@ -26,7 +26,7 @@ const allowedOrigins = config.cors.origin.split(',');
 const fallbackAvatar = 'https://res.cloudinary.com/daily-now/image/upload/v1594823750/placeholders/avatar.jpg';
 
 const validateRedirectUri = (redirectUri) => {
-  if (!allowedOrigins.filter(origin => redirectUri.indexOf(origin) > -1).length) {
+  if (!allowedOrigins.filter((origin) => redirectUri.indexOf(origin) > -1).length) {
     throw new ForbiddenError();
   }
 };
@@ -128,10 +128,11 @@ const authenticate = async (ctx, redirectUriFunc) => {
     await publishEvent(userRegisteredTopic, user, ctx.log);
   }
 
-  return Object.assign({}, user, {
+  return {
+    ...user,
     providers: [providerName],
     newUser,
-  });
+  };
 };
 
 router.get(
@@ -162,7 +163,7 @@ router.get(
   }, {
     stripUnknown: true,
   }),
-  ctx => callback(ctx, ctx.request.query.provider, (query, state) => ({
+  (ctx) => callback(ctx, ctx.request.query.provider, (query, state) => ({
     providerCode: query.code,
     provider: state.provider,
     codeChallenge: state.code_challenge,
@@ -190,7 +191,7 @@ router.post(
 );
 
 Object.keys(providersConfig).forEach((providerName) => {
-  const redirectUri = ctx => `${ctx.request.origin}/v1/auth/${providerName}/callback`;
+  const redirectUri = (ctx) => `${ctx.request.origin}/v1/auth/${providerName}/callback`;
 
   router.get(
     `/${providerName}/authorize`,
@@ -199,10 +200,10 @@ Object.keys(providersConfig).forEach((providerName) => {
         redirect_uri: string().required(),
       },
     }),
-    ctx => authorize(ctx, providerName, redirectUri(ctx)),
+    (ctx) => authorize(ctx, providerName, redirectUri(ctx)),
   );
 
-  router.get(`/${providerName}/callback`, ctx => callback(ctx, ctx.request.query.provider, query => ({
+  router.get(`/${providerName}/callback`, (ctx) => callback(ctx, ctx.request.query.provider, (query) => ({
     providerCode: query.code,
     provider: providerName,
   })));
@@ -226,11 +227,12 @@ Object.keys(providersConfig).forEach((providerName) => {
       ctx.log.info(`connected ${userId} with ${providerName}`);
 
       ctx.status = 200;
-      ctx.body = Object.assign({}, user, {
+      ctx.body = {
+        ...user,
         accessToken: accessToken.token,
         expiresIn: accessToken.expiresIn,
         refreshToken: rfToken,
-      });
+      };
     },
   );
 });

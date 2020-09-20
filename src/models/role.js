@@ -2,11 +2,10 @@ import db, { toSnakeCase } from '../db';
 
 const table = 'roles';
 
-const getByUserId = userId =>
-  db.select('role').from(table)
-    .where('user_id', '=', userId)
-    .orderBy('role')
-    .map(x => x.role);
+const getByUserId = (userId) => db.select('role').from(table)
+  .where('user_id', '=', userId)
+  .orderBy('role')
+  .map((x) => x.role);
 
 const add = (userId, role) => {
   const obj = {

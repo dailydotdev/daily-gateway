@@ -88,7 +88,7 @@ describe('referrals routes', () => {
     await knexCleaner.clean(db, { ignoreTables: ['knex_migrations', 'knex_migrations_lock'] });
     await migrate();
     await db.insert(boardFixture).into('users');
-    await Promise.all(fixture.map(f => contest.add(
+    await Promise.all(fixture.map((f) => contest.add(
       f.startAt,
       f.endAt,
     )));

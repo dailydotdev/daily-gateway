@@ -13,6 +13,13 @@ import { getTrackingId, setTrackingId } from '../tracking';
 import config from '../config';
 import { setAuthCookie, addSubdomainOpts } from '../cookies';
 import { publishEvent, userUpdatedTopic } from '../pubsub';
+import upload from '../upload';
+import { uploadAvatar } from '../cloudinary';
+
+const updateUser = async (userId, user, newProfile) => {
+  await userModel.update(userId, newProfile);
+  await publishEvent(userUpdatedTopic, { user, newProfile });
+};
 
 const router = Router({
   prefix: '/users',
@@ -43,7 +50,7 @@ router.get(
       }
 
       ctx.status = 200;
-      ctx.body = Object.assign({}, user, { providers: [userProvider.provider], roles });
+      ctx.body = { ...user, providers: [userProvider.provider], roles };
     } else if (trackingId && trackingId.length) {
       visitId = trackingId;
       ctx.status = 200;
@@ -56,7 +63,7 @@ router.get(
     if (app === 'extension') {
       const referral = ctx.cookies.get(config.cookies.referral.key, config.cookies.referral.opts);
       visit.upsert(visitId, app, new Date(), new Date(), referral)
-        .catch(err => ctx.log.error({ err }, `failed to update visit for ${visitId}`));
+        .catch((err) => ctx.log.error({ err }, `failed to update visit for ${visitId}`));
     }
   },
 );
@@ -80,20 +87,18 @@ router.put(
         throw new ForbiddenError();
       }
       const { body } = ctx.request;
-      const newProfile = Object.assign(
-        {},
-        user,
-        { acceptedMarketing: true },
-        body,
-        { infoConfirmed: true },
-      );
+      const newProfile = {
+        ...user,
+        acceptedMarketing: true,
+        ...body,
+        infoConfirmed: true,
+      };
       const dup = await userModel.checkDuplicateEmail(userId, newProfile.email);
       if (dup) {
         throw new ValidationError('email', 'email already exists');
       }
       ctx.log.info(`updating profile for ${userId}`);
-      await userModel.update(userId, newProfile);
-      await publishEvent(userUpdatedTopic, { user, newProfile });
+      await updateUser(userId, user, newProfile);
       ctx.body = newProfile;
       ctx.status = 200;
     } else {
@@ -145,6 +150,28 @@ router.post(
       undefined, addSubdomainOpts(ctx, config.cookies.referral.opts),
     );
     ctx.status = 204;
+  },
+);
+
+router.post(
+  '/me/image',
+  async (ctx) => {
+    if (ctx.state.user) {
+      const { userId } = ctx.state.user;
+      const { file } = await upload(ctx.req, { limits: { files: 1, fileSize: 5 * 1024 * 1024 } });
+      ctx.log.info(`updating image for ${userId}`);
+      const avatarUrl = await uploadAvatar(userId, file);
+      const user = await userModel.getById(userId);
+      const newProfile = {
+        ...user,
+        image: avatarUrl,
+      };
+      await updateUser(userId, user, newProfile);
+      ctx.body = newProfile;
+      ctx.status = 200;
+    } else {
+      throw new ForbiddenError();
+    }
   },
 );
 

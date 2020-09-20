@@ -8,7 +8,7 @@ export const addSubdomainOpts = (ctx, opts) => {
     parts.shift();
   }
   const domain = parts.join('.');
-  return Object.assign({}, opts, { domain });
+  return { ...opts, domain };
 };
 
 export const setAuthCookie = async (ctx, user, roles = []) => {

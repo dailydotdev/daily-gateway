@@ -83,7 +83,7 @@ router.get(
   },
 );
 
-router.get('/privacy', ctx => ctx.redirect('https://www.iubenda.com/privacy-policy/14695236'));
-router.get('/tos', ctx => ctx.redirect('https://medium.com/daily-now/daily-terms-of-service-47bb9c9a4b99'));
+router.get('/privacy', (ctx) => ctx.redirect('https://www.iubenda.com/privacy-policy/14695236'));
+router.get('/tos', (ctx) => ctx.redirect('https://medium.com/daily-now/daily-terms-of-service-47bb9c9a4b99'));
 
 export default router;

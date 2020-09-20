@@ -18,13 +18,13 @@ describe('user model', () => {
       fixture[0].image,
     );
 
-    expect(model).to.deep.equal(Object.assign({}, fixture[0], { referral: null }));
+    expect(model).to.deep.equal({ ...fixture[0], referral: null });
   });
 
   it('should add new user to db with just an id', async () => {
     const model = await user.add(fixture[1].id);
 
-    expect(model).to.deep.equal(Object.assign({}, fixture[1], { referral: null }));
+    expect(model).to.deep.equal({ ...fixture[1], referral: null });
   });
 
   it('should fetch user by id', async () => {
@@ -35,22 +35,24 @@ describe('user model', () => {
       fixture[0].image,
     );
     const model = await user.getById(fixture[0].id);
-    expect(model).to.deep.equal(Object.assign({}, fixture[0], {
+    expect(model).to.deep.equal({
+      ...fixture[0],
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
-    }));
+    });
   });
 
   it('should update user', async () => {
     await user.add(fixture[2].id);
     await user.update(fixture[2].id, fixture[2]);
     const model = await user.getById(fixture[2].id);
-    expect(model).to.deep.equal(Object.assign({}, fixture[2], {
+    expect(model).to.deep.equal({
+      ...fixture[2],
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
-    }));
+    });
   });
 
   it('should update user reputation', async () => {

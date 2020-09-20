@@ -100,15 +100,15 @@ router.get(
       const { userId } = ctx.state.user || { userId: null };
       const [board, me] = await Promise.all([
         contest.getContestLeaderboard(ongoing.startAt, ongoing.endAt),
-        ctx.state.user ?
-          contest.getUserRank(ongoing.startAt, ongoing.endAt, userId) :
-          Promise.resolve(null),
+        ctx.state.user
+          ? contest.getUserRank(ongoing.startAt, ongoing.endAt, userId)
+          : Promise.resolve(null),
       ]);
       ctx.status = 200;
       ctx.body = {
         ongoing,
         upcoming,
-        board: board.map((b, i) => Object.assign({}, b, { prize: prizes[i] })),
+        board: board.map((b, i) => ({ ...b, prize: prizes[i] })),
         me,
         referralLink: getReferralLink(ctx),
       };

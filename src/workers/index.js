@@ -10,7 +10,7 @@ const initializeWorker = async (worker, log) => {
     await subscription.get({ autoCreate: true });
   }
   log.info(`waiting for messages in ${topic.name}`);
-  subscription.on('message', message => worker.handler(message, log));
+  subscription.on('message', (message) => worker.handler(message, log));
 };
 
 // eslint-disable-next-line import/prefer-default-export

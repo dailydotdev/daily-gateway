@@ -2,7 +2,9 @@
 
 import fs from 'fs';
 import db, { toCamelCase } from '../db';
-import { fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleToken } from '../profile';
+import {
+  fetchGithubProfile, callGithubApi, fetchGoogleProfile, refreshGoogleToken,
+} from '../profile';
 
 const fetchGithub = async (accessToken) => {
   const profile = await fetchGithubProfile(accessToken);
@@ -42,30 +44,29 @@ const fetchInfos = async (users, info) => {
 
   const parallel = 50;
   const runUsers = users.slice(0, parallel);
-  const newInfo = (await Promise.all(runUsers.map(u =>
-    fetchInfo(u)
-      .then(([p]) => {
-        if (p) {
-          const res = {
-            email: p.email,
-            user_id: u.userId,
-            followers: p.followers,
-          };
-          if (p.name) {
-            const split = p.name.split(' ');
-            [res.first_name] = split;
-            res.last_name = split.slice(1).join(' ');
-          }
-          return [res];
+  const newInfo = (await Promise.all(runUsers.map((u) => fetchInfo(u)
+    .then(([p]) => {
+      if (p) {
+        const res = {
+          email: p.email,
+          user_id: u.userId,
+          followers: p.followers,
+        };
+        if (p.name) {
+          const split = p.name.split(' ');
+          [res.first_name] = split;
+          res.last_name = split.slice(1).join(' ');
         }
-        return [];
-      })
-      .catch((e) => {
-        console.error(e);
-        return [];
-      }))))
+        return [res];
+      }
+      return [];
+    })
+    .catch((e) => {
+      console.error(e);
+      return [];
+    }))))
     .reduce((acc, val) => acc.concat(val), [])
-    .filter(p => p.email && p.email.indexOf('users.noreply.github.com') < 0);
+    .filter((p) => p.email && p.email.indexOf('users.noreply.github.com') < 0);
   console.log(`next batch, users left: ${users.length}`);
   return fetchInfos(users.slice(parallel), info.concat(newInfo));
 };
@@ -80,7 +81,7 @@ const run = async () => {
 };
 
 run()
-  .then(res => fs.writeFileSync('users.json', JSON.stringify(res), 'utf8'))
+  .then((res) => fs.writeFileSync('users.json', JSON.stringify(res), 'utf8'))
   .catch(console.error)
   .then(process.exit);
 

@@ -31,7 +31,7 @@ app.use(cors({
   credentials: true,
   origin(ctx) {
     const requestOrigin = ctx.get('Origin');
-    if (allowedOrigins.filter(origin => requestOrigin.indexOf(origin) > -1).length) {
+    if (allowedOrigins.filter((origin) => requestOrigin.indexOf(origin) > -1).length) {
       return requestOrigin;
     }
     return false;
@@ -108,7 +108,7 @@ app.use(proxy('/v1/a', {
   target: config.monetizationUrl,
   changeOrigin: true,
   xfwd: true,
-  rewrite: path => path.substr('/v1'.length),
+  rewrite: (path) => path.substr('/v1'.length),
 }));
 
 app.use(proxy('/icon', {

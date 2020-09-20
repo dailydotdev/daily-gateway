@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 export class EntityNotFoundError extends Error {
   constructor(entityName, fieldName, fieldValue) {
     super(`No ${entityName} found that matches ${fieldName}: ${fieldValue}`);

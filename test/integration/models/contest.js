@@ -95,7 +95,7 @@ describe('contest model', () => {
   });
 
   it('should fetch ongoing contest', async () => {
-    await Promise.all(fixture.map(f => contest.add(
+    await Promise.all(fixture.map((f) => contest.add(
       f.startAt,
       f.endAt,
     )));
@@ -104,7 +104,7 @@ describe('contest model', () => {
   });
 
   it('should fetch upcoming contest', async () => {
-    await Promise.all(fixture.map(f => contest.add(
+    await Promise.all(fixture.map((f) => contest.add(
       f.startAt,
       f.endAt,
     )));

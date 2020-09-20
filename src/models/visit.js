@@ -2,12 +2,11 @@ import db, { toCamelCase, toSnakeCase } from '../db';
 
 const table = 'visits';
 
-const get = (userId, app) =>
-  db.select('visited_at', 'first_visit', 'referral').from(table)
-    .where('user_id', '=', userId)
-    .andWhere('app', '=', app)
-    .map(toCamelCase)
-    .then(rows => (rows.length ? rows[0] : null));
+const get = (userId, app) => db.select('visited_at', 'first_visit', 'referral').from(table)
+  .where('user_id', '=', userId)
+  .andWhere('app', '=', app)
+  .map(toCamelCase)
+  .then((rows) => (rows.length ? rows[0] : null));
 
 const upsert = (userId, app, visitedAt, firstVisit, referral) => {
   const obj = {

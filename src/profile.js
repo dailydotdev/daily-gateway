@@ -19,22 +19,19 @@ export const refreshGoogleToken = async (userId, refreshToken) => {
   return (typeof res === 'string') ? JSON.parse(res) : res;
 };
 
-export const fetchGoogleProfile = accessToken =>
-  rp.get(`https://people.googleapis.com/v1/people/me?personFields=emailAddresses,names,photos&access_token=${accessToken}`)
-    .then(res => JSON.parse(res));
+export const fetchGoogleProfile = (accessToken) => rp.get(`https://people.googleapis.com/v1/people/me?personFields=emailAddresses,names,photos&access_token=${accessToken}`)
+  .then((res) => JSON.parse(res));
 
-export const callGithubApi = (endpoint, accessToken) =>
-  rp.get({
-    url: `https://api.github.com/${endpoint}`,
-    headers: {
-      Authorization: `token ${accessToken}`,
-      'User-Agent': 'Daily',
-    },
-  })
-    .then(res => JSON.parse(res));
+export const callGithubApi = (endpoint, accessToken) => rp.get({
+  url: `https://api.github.com/${endpoint}`,
+  headers: {
+    Authorization: `token ${accessToken}`,
+    'User-Agent': 'Daily',
+  },
+})
+  .then((res) => JSON.parse(res));
 
-export const fetchGithubProfile = accessToken =>
-  callGithubApi('user', accessToken);
+export const fetchGithubProfile = (accessToken) => callGithubApi('user', accessToken);
 
 export const fetchProfile = async (provider, accessToken) => {
   if (provider === 'github') {
@@ -48,7 +45,7 @@ export const fetchProfile = async (provider, accessToken) => {
       image: profile.avatar_url,
       email: emails && emails.length && emails[0].email,
     };
-  } else if (provider === 'google') {
+  } if (provider === 'google') {
     const profile = await fetchGoogleProfile(accessToken);
     return {
       id: profile.resourceName.replace('people/', ''),

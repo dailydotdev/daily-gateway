@@ -12,11 +12,11 @@ const getMysqlConfig = () => {
   };
 
   if (process.env.MYSQL_INSTANCE && process.env.NODE_ENV === 'production') {
-    return Object.assign({}, base, { socketPath: `/cloudsql/${process.env.MYSQL_INSTANCE}` });
+    return { ...base, socketPath: `/cloudsql/${process.env.MYSQL_INSTANCE}` };
   }
 
   if (process.env.MYSQL_HOST) {
-    return Object.assign({}, base, { host: process.env.MYSQL_HOST });
+    return { ...base, host: process.env.MYSQL_HOST };
   }
 
   return base;
