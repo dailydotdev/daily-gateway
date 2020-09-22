@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 import rp from 'request-promise-native';
-import validator, { object, string } from 'koa-context-validator';
+import validator, { object, string, boolean } from 'koa-context-validator';
 import config from '../config';
 import provider from '../models/provider';
 import refreshToken from '../models/refreshToken';
@@ -24,6 +24,7 @@ const providersConfig = {
 
 const allowedOrigins = config.cors.origin.split(',');
 const fallbackAvatar = 'https://res.cloudinary.com/daily-now/image/upload/v1594823750/placeholders/avatar.jpg';
+const primaryRedirectUri = `${config.primaryAuthOrigin}/v1/auth/callback`;
 
 const validateRedirectUri = (redirectUri) => {
   if (!allowedOrigins.filter((origin) => redirectUri.indexOf(origin) > -1).length) {
@@ -31,50 +32,8 @@ const validateRedirectUri = (redirectUri) => {
   }
 };
 
-const authorize = (ctx, providerName, redirectUri) => {
-  const { query, origin, url: reqUrl } = ctx.request;
-  if (origin !== config.primaryAuthOrigin) {
-    ctx.status = 307;
-    ctx.redirect(`${config.primaryAuthOrigin}${reqUrl}`);
-    return;
-  }
-
-  validateRedirectUri(query.redirect_uri);
+const authenticateToken = async (ctx, redirectUri, providerName, providerCode) => {
   const providerConfig = providersConfig[providerName];
-  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(JSON.stringify(query))}`;
-
-  ctx.status = 307;
-  ctx.redirect(url);
-};
-
-const callback = async (ctx, providerName, payloadFunc) => {
-  const { query } = ctx.request;
-  const state = JSON.parse(query.state);
-  validateRedirectUri(state.redirect_uri);
-  const { token: code } = await signJwt(payloadFunc(query, state), 60 * 1000);
-
-  ctx.status = 307;
-  ctx.redirect(`${state.redirect_uri}${state.redirect_uri.indexOf('?') > -1 ? '&' : '?'}code=${code}`);
-};
-
-const authenticate = async (ctx, redirectUriFunc) => {
-  const { body } = ctx.request;
-  let codeJwt;
-  try {
-    codeJwt = await verifyJwt(body.code);
-  } catch (err) {
-    throw new ForbiddenError();
-  }
-  if (codeJwt.codeChallenge) {
-    const challenge = generateChallenge(body.code_verifier);
-    if (challenge !== codeJwt.codeChallenge) {
-      ctx.log.info(`user code challenge ${codeJwt.codeChallenge} does not equal calculated challenge ${challenge}`);
-      throw new ForbiddenError();
-    }
-  }
-  const providerName = codeJwt.provider;
-  const providerConfig = providersConfig[providerName];
-  const redirectUri = redirectUriFunc(providerName, codeJwt);
   const resRaw = await rp({
     url: providerConfig.authenticateUrl,
     method: 'POST',
@@ -84,7 +43,7 @@ const authenticate = async (ctx, redirectUriFunc) => {
     form: {
       client_id: providerConfig.clientId,
       client_secret: providerConfig.clientSecret,
-      code: codeJwt.providerCode,
+      code: providerCode,
       redirect_uri: redirectUri,
       grant_type: 'authorization_code',
     },
@@ -135,13 +94,71 @@ const authenticate = async (ctx, redirectUriFunc) => {
   };
 };
 
+const authorize = (ctx, providerName, redirectUri) => {
+  const { query, origin, url: reqUrl } = ctx.request;
+  if (origin !== config.primaryAuthOrigin) {
+    ctx.status = 307;
+    ctx.redirect(`${config.primaryAuthOrigin}${reqUrl}`);
+    return;
+  }
+
+  validateRedirectUri(query.redirect_uri);
+  const providerConfig = providersConfig[providerName];
+  const url = `${providerConfig.authorizeUrl}?access_type=offline&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&client_id=${providerConfig.clientId}&scope=${encodeURIComponent(providerConfig.scope)}&state=${encodeURIComponent(JSON.stringify(query))}`;
+
+  ctx.status = 307;
+  ctx.redirect(url);
+};
+
+const callback = async (ctx, providerName, payloadFunc) => {
+  const { query } = ctx.request;
+  const state = JSON.parse(query.state);
+  validateRedirectUri(state.redirect_uri);
+
+  ctx.status = 307;
+  if (state.skip_authenticate) {
+    const user = await authenticateToken(ctx, primaryRedirectUri, state.provider, query.code);
+    await setAuthCookie(ctx, user);
+    ctx.log.info(`connected ${user.id} with ${user.providers[0]}`);
+    if (user.infoConfirmed) {
+      ctx.redirect(state.redirect_uri);
+    } else {
+      ctx.redirect(`${config.webappOrigin}/register?redirect_uri=${encodeURIComponent(state.redirect_uri)}`);
+    }
+  } else {
+    const { token: code } = await signJwt(payloadFunc(query, state), 60 * 1000);
+    ctx.redirect(`${state.redirect_uri}${state.redirect_uri.indexOf('?') > -1 ? '&' : '?'}code=${code}`);
+  }
+};
+
+const authenticate = async (ctx, redirectUriFunc) => {
+  const { body } = ctx.request;
+  let codeJwt;
+  try {
+    codeJwt = await verifyJwt(body.code);
+  } catch (err) {
+    throw new ForbiddenError();
+  }
+  if (codeJwt.codeChallenge) {
+    const challenge = generateChallenge(body.code_verifier);
+    if (challenge !== codeJwt.codeChallenge) {
+      ctx.log.info(`user code challenge ${codeJwt.codeChallenge} does not equal calculated challenge ${challenge}`);
+      throw new ForbiddenError();
+    }
+  }
+  const providerName = codeJwt.provider;
+  const redirectUri = redirectUriFunc(providerName, codeJwt);
+  return authenticateToken(ctx, redirectUri, providerName, codeJwt.providerCode);
+};
+
 router.get(
   '/authorize',
   validator({
     query: {
       redirect_uri: string().required(),
-      code_challenge: string().required(),
+      code_challenge: string(),
       provider: string().required(),
+      skip_authenticate: boolean(),
     },
   }, {
     stripUnknown: true,
@@ -181,7 +198,7 @@ router.post(
     stripUnknown: true,
   }),
   async (ctx) => {
-    const user = await authenticate(ctx, () => `${config.primaryAuthOrigin}/v1/auth/callback`);
+    const user = await authenticate(ctx, () => primaryRedirectUri);
     await setAuthCookie(ctx, user);
 
     ctx.log.info(`connected ${user.id} with ${user.providers[0]}`);

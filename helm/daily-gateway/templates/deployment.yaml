@@ -196,6 +196,11 @@ spec:
               secretKeyRef:
                 name: {{ template "daily-gateway.fullname" . }}
                 key: CLOUDINARY_URL
+          - name: WEBAPP_ORIGIN
+            valueFrom:
+              configMapKeyRef:
+                name: {{ template "daily-gateway.fullname" . }}
+                key: WEBAPP_ORIGIN
           volumeMounts:
           - name: config
             mountPath: "/etc/config"
