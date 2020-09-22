@@ -89,6 +89,7 @@ describe('auth routes', () => {
       expect(model.accessToken).to.equal('token');
       expect(model.providerId).to.equal('github_id');
       const user = await userModel.getById(res.body.id);
+      delete user.createdAt;
       expect(user).to.deep.equal({
         id: res.body.id,
         name: 'John',
@@ -97,6 +98,7 @@ describe('auth routes', () => {
         infoConfirmed: false,
         premium: false,
         acceptedMarketing: true,
+        reputation: 0,
       });
     });
 

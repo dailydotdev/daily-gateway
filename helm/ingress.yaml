@@ -9,7 +9,8 @@ metadata:
   namespace: daily
 spec:
   rules:
-    - http:
+    - host: api.daily.dev
+      http:
         paths:
           - path: /*
             backend:
@@ -30,6 +31,17 @@ spec:
           - path: /scrape/*
             backend:
               serviceName: daily-scraper
+              servicePort: http
+    - host: app.dailynow.co
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: daily-gateway
+              servicePort: http
+          - path: /v1/auth/*
+            backend:
+              serviceName: daily-gateway
               servicePort: http
   tls:
     - hosts:

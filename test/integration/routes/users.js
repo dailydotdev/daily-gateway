@@ -79,6 +79,7 @@ describe('users routes', () => {
         .set('Authorization', `Bearer ${body.accessToken}`)
         .expect(200);
 
+      delete res.body.createdAt;
       expect(res.body).to.deep.equal({
         id: body.id,
         providers: ['github'],
@@ -89,6 +90,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         roles: [],
+        reputation: 0,
       });
     });
 
@@ -147,6 +149,7 @@ describe('users routes', () => {
         .set('Authorization', `Bearer ${body.accessToken}`)
         .expect(200);
 
+      delete res.body.createdAt;
       expect(res.body).to.deep.equal({
         id: body.id,
         providers: ['github'],
@@ -157,6 +160,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         roles: ['admin', 'moderator'],
+        reputation: 0,
       });
     });
   });
@@ -277,8 +281,17 @@ describe('users routes', () => {
         })
         .expect(200);
 
+      delete res.body.createdAt;
       expect(res.body).to.deep.equal({
-        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false, acceptedMarketing: true,
+        id: 'id',
+        name: 'John',
+        email: 'john@acme.com',
+        company: 'ACME',
+        title: 'Developer',
+        infoConfirmed: true,
+        premium: false,
+        acceptedMarketing: true,
+        reputation: 0,
       });
     });
 
@@ -295,8 +308,17 @@ describe('users routes', () => {
         })
         .expect(200);
 
+      delete res.body.createdAt;
       expect(res.body).to.deep.equal({
-        id: 'id', name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', infoConfirmed: true, premium: false, acceptedMarketing: true,
+        id: 'id',
+        name: 'John',
+        email: 'john@acme.com',
+        company: 'ACME',
+        title: 'Developer',
+        infoConfirmed: true,
+        premium: false,
+        acceptedMarketing: true,
+        reputation: 0,
       });
     });
 
@@ -317,6 +339,98 @@ describe('users routes', () => {
       expect(res.body).to.deep.equal({
         code: 1,
         message: 'email already exists',
+        field: 'email',
+        reason: 'email already exists',
+      });
+    });
+
+    it('should throw bad request on duplicate username', async () => {
+      await userModel.add('id', 'John');
+      await userModel.add('id2', 'John2');
+      await userModel.update('id2', { username: 'idoshamun' });
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', username: 'IdoShamun',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'username already exists',
+        field: 'username',
+        reason: 'username already exists',
+      });
+    });
+
+    it('should throw bad request on duplicate twitter handle', async () => {
+      await userModel.add('id', 'John');
+      await userModel.add('id2', 'John2');
+      await userModel.update('id2', { twitter: 'idoshamun' });
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', twitter: 'IdoShamun',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'twitter handle already exists',
+        field: 'twitter',
+        reason: 'twitter handle already exists',
+      });
+    });
+
+    it('should throw bad request on duplicate github handle', async () => {
+      await userModel.add('id', 'John');
+      await userModel.add('id2', 'John2');
+      await userModel.update('id2', { github: 'idoshamun' });
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', github: 'IdoShamun',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'github handle already exists',
+        field: 'github',
+        reason: 'github handle already exists',
+      });
+    });
+
+    it('should throw bad request on invalid username', async () => {
+      await userModel.add('id', 'John');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', username: 'john$%^',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        field: 'username',
+        message: 'child "username" fails because ["username" with value "john&#x24;&#x25;&#x5e;" fails to match the required pattern: /^@?(\\w){1,15}$/]',
+        reason: '"username" with value "john&#x24;&#x25;&#x5e;" fails to match the required pattern: /^@?(\\w){1,15}$/',
       });
     });
   });

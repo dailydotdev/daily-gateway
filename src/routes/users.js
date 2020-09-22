@@ -72,11 +72,16 @@ router.put(
   '/me',
   validator({
     body: object().keys({
-      name: string().required(),
+      name: string().required().max(50),
       email: string().email().required(),
-      company: string().allow(null),
-      title: string().allow(null),
+      company: string().allow(null).max(50),
+      title: string().allow(null).max(50),
       acceptedMarketing: boolean(),
+      username: string().allow(null).regex(/^@?(\w){1,15}$/),
+      bio: string().allow(null).max(160),
+      twitter: string().allow(null),
+      github: string().allow(null),
+      portfolio: string().allow(null),
     }),
   }, { stripUnknown: true }),
   async (ctx) => {
@@ -98,7 +103,22 @@ router.put(
         throw new ValidationError('email', 'email already exists');
       }
       ctx.log.info(`updating profile for ${userId}`);
-      await updateUser(userId, user, newProfile);
+      try {
+        await updateUser(userId, user, newProfile);
+      } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+          if (err.sqlMessage.indexOf('users_username_unique') > -1) {
+            throw new ValidationError('username', 'username already exists');
+          }
+          if (err.sqlMessage.indexOf('users_twitter_unique') > -1) {
+            throw new ValidationError('twitter', 'twitter handle already exists');
+          }
+          if (err.sqlMessage.indexOf('users_github_unique') > -1) {
+            throw new ValidationError('github', 'github handle already exists');
+          }
+        }
+        throw err;
+      }
       ctx.body = newProfile;
       ctx.status = 200;
     } else {

@@ -14,6 +14,6 @@ spec:
   acme:
     config:
     - http01:
-        ingress: daily-gateway
+        ingress: daily-ingress
       domains:
       - api.daily.dev

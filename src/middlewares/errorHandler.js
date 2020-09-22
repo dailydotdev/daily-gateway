@@ -12,6 +12,8 @@ const errorHandler = () => async (ctx, next) => {
         ctx.body = {
           code: 1,
           message: err.message,
+          field: err.field || err.details[0].path,
+          reason: err.reason || err.details[0].message,
         };
         break;
       case EntityNotFoundError.name:

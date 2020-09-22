@@ -35,11 +35,13 @@ describe('user model', () => {
       fixture[0].image,
     );
     const model = await user.getById(fixture[0].id);
+    delete model.createdAt;
     expect(model).to.deep.equal({
       ...fixture[0],
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
+      reputation: 0,
     });
   });
 
@@ -47,11 +49,13 @@ describe('user model', () => {
     await user.add(fixture[2].id);
     await user.update(fixture[2].id, fixture[2]);
     const model = await user.getById(fixture[2].id);
+    delete model.createdAt;
     expect(model).to.deep.equal({
       ...fixture[2],
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
+      reputation: 0,
     });
   });
 

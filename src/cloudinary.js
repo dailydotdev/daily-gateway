@@ -11,7 +11,7 @@ export const uploadAvatar = (userId, stream) => new Promise((resolve, reject) =>
       if (err) {
         return reject(err);
       }
-      return resolve(cloudinary.v2.url(res.public_id, { secure: true, fetch_format: 'auto' }));
+      return resolve(cloudinary.v2.url(`v${res.version}/${res.public_id}`, { secure: true, fetch_format: 'auto' }));
     },
   );
   stream.pipe(outStream);

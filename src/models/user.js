@@ -3,7 +3,7 @@ import db, { toCamelCase, toSnakeCase } from '../db';
 
 const table = 'users';
 
-const select = () => db.select('id', 'name', 'email', 'image', 'company', 'title', 'info_confirmed', 'premium', 'accepted_marketing').from(table);
+const select = () => db.select('id', 'name', 'email', 'image', 'company', 'title', 'info_confirmed', 'premium', 'accepted_marketing', 'username', 'bio', 'twitter', 'github', 'portfolio', 'reputation', 'created_at').from(table);
 
 const mapUser = (user) => {
   const obj = _.omitBy(toCamelCase(user), _.isNull);
@@ -50,7 +50,7 @@ const add = (id, name, email, image, referral = null) => {
 
 const update = (id, user) => db(table)
   .where('id', '=', id)
-  .update(toSnakeCase({ ..._.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed', 'premium', 'acceptedMarketing']), updatedAt: new Date() }));
+  .update(toSnakeCase({ ..._.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed', 'premium', 'acceptedMarketing', 'username', 'bio', 'twitter', 'github', 'portfolio']), updatedAt: new Date() }));
 
 const updateReputation = (id, reputation) => db(table)
   .where('id', '=', id)
