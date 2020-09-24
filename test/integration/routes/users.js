@@ -91,6 +91,7 @@ describe('users routes', () => {
         acceptedMarketing: true,
         roles: [],
         reputation: 0,
+        permalink: `http://localhost:5002/${res.body.id}`,
       });
     });
 
@@ -161,6 +162,7 @@ describe('users routes', () => {
         acceptedMarketing: true,
         roles: ['admin', 'moderator'],
         reputation: 0,
+        permalink: `http://localhost:5002/${res.body.id}`,
       });
     });
   });

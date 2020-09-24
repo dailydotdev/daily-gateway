@@ -101,7 +101,7 @@ const config = {
   scraperSecret: process.env.SCRAPER_SECRET,
   accessSecret: process.env.ACCESS_SECRET || 'topsecret',
   primaryAuthOrigin: process.env.PRIMARY_AUTH_ORIGIN,
-  webappOrigin: process.env.WEBAPP_ORIGIN,
+  webappOrigin: process.env.WEBAPP_ORIGIN || 'http://localhost:5002',
 };
 
 export default config;

@@ -51,7 +51,7 @@ router.get(
       }
 
       ctx.status = 200;
-      ctx.body = { ...user, providers: [userProvider.provider], roles };
+      ctx.body = { ...user, providers: [userProvider.provider], roles, permalink: `${config.webappOrigin}/${user.username || user.id}` };
     } else if (trackingId && trackingId.length) {
       visitId = trackingId;
       ctx.status = 200;
