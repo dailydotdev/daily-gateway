@@ -4,6 +4,7 @@ import validator, {
   string,
   boolean,
 } from 'koa-context-validator';
+import _ from 'lodash';
 import { ForbiddenError, ValidationError } from '../errors';
 import provider from '../models/provider';
 import userModel from '../models/user';
@@ -192,6 +193,19 @@ router.post(
     } else {
       throw new ForbiddenError();
     }
+  },
+);
+
+router.get(
+  '/:id',
+  async (ctx) => {
+    const user = await userModel.getByIdOrUsername(ctx.params.id);
+    if (!user) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.status = 200;
+    ctx.body = _.pick(user, ['id', 'name', 'image', 'premium', 'username', 'bio', 'twitter', 'github', 'portfolio', 'reputation', 'createdAt']);
   },
 );
 

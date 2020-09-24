@@ -434,4 +434,52 @@ describe('users routes', () => {
       });
     });
   });
+
+  describe('get user profile', () => {
+    it('should throw not found when no such user', async () => {
+      await request
+        .get('/v1/users/notfound')
+        .expect(404);
+    });
+
+    it('should return profile by id', async () => {
+      await userModel.add('id', 'John', 'john@acme.com', 'https://acme.com');
+      await userModel.update('id', { username: 'idoshamun', bio: 'My bio' });
+
+      const res = await request
+        .get('/v1/users/id')
+        .expect(200);
+
+      delete res.body.createdAt;
+      expect(res.body).to.deep.equal({
+        id: 'id',
+        name: 'John',
+        image: 'https://acme.com',
+        username: 'idoshamun',
+        bio: 'My bio',
+        premium: false,
+        reputation: 0,
+      });
+    });
+
+    it('should return profile by username', async () => {
+      await userModel.add('id', 'John', 'john@acme.com', 'https://acme.com');
+      await userModel.update('id', { username: 'idoshamun', bio: 'My bio' });
+
+      const res = await request
+        .get('/v1/users/idoshamun')
+        .expect(200);
+
+      delete res.body.createdAt;
+      expect(res.body).to.deep.equal({
+        id: 'id',
+        name: 'John',
+        image: 'https://acme.com',
+        username: 'idoshamun',
+        bio: 'My bio',
+        premium: false,
+        reputation: 0,
+      });
+    });
+  });
 });

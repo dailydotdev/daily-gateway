@@ -21,6 +21,13 @@ const getById = (id) => select()
   .map(mapUser)
   .then((res) => (res.length ? res[0] : null));
 
+const getByIdOrUsername = (id) => select()
+  .where('id', '=', id)
+  .orWhere('username', '=', id)
+  .limit(1)
+  .map(mapUser)
+  .then((res) => (res.length ? res[0] : null));
+
 const checkDuplicateEmail = (id, email) => db
   .select('id')
   .from(table)
@@ -58,6 +65,7 @@ const updateReputation = (id, reputation) => db(table)
 
 export default {
   getById,
+  getByIdOrUsername,
   checkDuplicateEmail,
   add,
   update,
