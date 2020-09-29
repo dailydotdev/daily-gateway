@@ -57,7 +57,7 @@ router.get(
       if (!user.infoConfirmed) {
         ctx.body = {
           ...ctx.body, registrationLink: `${config.webappOrigin}/register`,
-        }
+        };
       }
     } else if (trackingId && trackingId.length) {
       visitId = trackingId;
