@@ -92,6 +92,7 @@ describe('users routes', () => {
         roles: [],
         reputation: 0,
         permalink: `http://localhost:5002/${res.body.id}`,
+        registrationLink: 'http://localhost:5002/register',
       });
     });
 
@@ -163,6 +164,7 @@ describe('users routes', () => {
         roles: ['admin', 'moderator'],
         reputation: 0,
         permalink: `http://localhost:5002/${res.body.id}`,
+        registrationLink: 'http://localhost:5002/register',
       });
     });
   });
