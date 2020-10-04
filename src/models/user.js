@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import db, { toCamelCase, toSnakeCase } from '../db';
-import {getReferralLink} from '../referrals';
+import { getReferralLink } from '../referrals';
 
 const table = 'users';
 
