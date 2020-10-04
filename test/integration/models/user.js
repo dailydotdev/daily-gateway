@@ -42,6 +42,7 @@ describe('user model', () => {
       premium: false,
       acceptedMarketing: true,
       reputation: 0,
+      referralLink: 'https://api.daily.dev/get?r=1',
     });
   });
 
@@ -56,6 +57,7 @@ describe('user model', () => {
       premium: false,
       acceptedMarketing: true,
       reputation: 0,
+      referralLink: 'https://api.daily.dev/get?r=3',
     });
   });
 

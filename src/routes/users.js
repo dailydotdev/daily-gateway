@@ -16,6 +16,7 @@ import { setAuthCookie, addSubdomainOpts } from '../cookies';
 import { publishEvent, userUpdatedTopic } from '../pubsub';
 import upload from '../upload';
 import { uploadAvatar } from '../cloudinary';
+import { getReferralLink } from '../referrals';
 
 const updateUser = async (userId, user, newProfile) => {
   await userModel.update(userId, newProfile);

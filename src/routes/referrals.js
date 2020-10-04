@@ -3,9 +3,9 @@ import sgMail from '@sendgrid/mail';
 import validator, { object, string } from 'koa-context-validator';
 
 import contest from '../models/contest';
-import { getTrackingId } from '../tracking';
 import userModel from '../models/user';
 import { ForbiddenError } from '../errors';
+import { getReferralLink } from '../referrals';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -13,25 +13,17 @@ const router = Router({
   prefix: '/referrals',
 });
 
-const getReferralLink = (ctx) => {
-  const base = 'https://api.daily.dev/get?r=';
-  if (ctx.state.user) {
-    return `${base}${ctx.state.user.userId}`;
-  }
-
-  const trackingId = getTrackingId(ctx);
-  if (trackingId) {
-    return `${base}${trackingId}`;
-  }
-  return `${base}share`;
-};
-
 router.get(
   '/link',
-  (ctx) => {
+  async (ctx) => {
+    let user = null;
+    if (ctx.state.user) {
+      user = await userModel.getById(ctx.state.user.userId);
+    }
+
     ctx.status = 200;
     ctx.body = {
-      link: getReferralLink(ctx),
+      link: getReferralLink(ctx, user),
       cover: 'https://res.cloudinary.com/daily-now/image/upload/v1594561638/referrals/cover1.jpg',
     };
   },
@@ -70,7 +62,7 @@ router.post(
           full_name: user.name,
           first_name: firstName,
           profile_image: user.image,
-          referral_link: getReferralLink(ctx),
+          referral_link: getReferralLink(ctx, user),
         },
         tracking_settings: {
           open_tracking: { enable: true },

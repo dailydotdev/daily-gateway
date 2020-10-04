@@ -99,6 +99,7 @@ describe('auth routes', () => {
         premium: false,
         acceptedMarketing: true,
         reputation: 0,
+        referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
       });
     });
 

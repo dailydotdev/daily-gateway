@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import db, { toCamelCase, toSnakeCase } from '../db';
+import {getReferralLink} from '../referrals';
 
 const table = 'users';
 
@@ -12,6 +13,7 @@ const mapUser = (user) => {
     infoConfirmed: obj.infoConfirmed === 1,
     premium: obj.premium === 1,
     acceptedMarketing: obj.acceptedMarketing === 1,
+    referralLink: getReferralLink(null, obj),
   };
 };
 

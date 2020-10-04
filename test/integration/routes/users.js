@@ -93,6 +93,7 @@ describe('users routes', () => {
         reputation: 0,
         permalink: `http://localhost:5002/${res.body.id}`,
         registrationLink: 'http://localhost:5002/register',
+        referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
       });
     });
 
@@ -165,6 +166,7 @@ describe('users routes', () => {
         reputation: 0,
         permalink: `http://localhost:5002/${res.body.id}`,
         registrationLink: 'http://localhost:5002/register',
+        referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
       });
     });
   });
@@ -296,6 +298,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         reputation: 0,
+        referralLink: 'https://api.daily.dev/get?r=id',
       });
     });
 
@@ -323,6 +326,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         reputation: 0,
+        referralLink: 'https://api.daily.dev/get?r=id',
       });
     });
 
