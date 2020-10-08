@@ -7,7 +7,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/node:14.3.1
+      - image: circleci/node:14.3.0
       - image: mysql:5.7
         environment:
           MYSQL_DATABASE: test
