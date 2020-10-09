@@ -48,7 +48,7 @@
     "mysql": "^2.15.0",
     "pino": "^4.7.3",
     "request": "^2.85.0",
-    "request-promise-native": "^1.0.5",
+    "request-promise-native": "^1.0.9",
     "shortid": "^2.2.15"
   },
   "devDependencies": {
