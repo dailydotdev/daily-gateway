@@ -29,7 +29,7 @@
     "@google-cloud/pubsub": "^2.2.0",
     "@google-cloud/trace-agent": "^5.1.1",
     "@koa/cors": "2",
-    "@sendgrid/client": "^6.4.0",
+    "@sendgrid/client": "^7.2.6",
     "@sendgrid/mail": "^7.2.1",
     "@slack/client": "^4.3.1",
     "busboy": "^0.3.1",
