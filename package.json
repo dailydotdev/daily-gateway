@@ -27,7 +27,7 @@
   "mocha": {
     "require": ["@babel/register", "test/setup"],
     "ui": "bdd",
-    "recursive": ["test/integration", "test/unit"],
+    "recursive": ["test/integration"],
     "timeout": 5000,
     "exit": true
   },
