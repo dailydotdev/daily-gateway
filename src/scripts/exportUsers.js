@@ -76,7 +76,7 @@ const run = async () => {
     .from('providers')
     .orderBy('created_at')
     .where('provider', '=', 'github')
-    .map(toCamelCase);
+    .then((res) => res.map(toCamelCase));
   return fetchInfos(users, []);
 };
 

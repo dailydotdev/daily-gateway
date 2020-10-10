@@ -8,7 +8,7 @@ const getOngoingContest = (now = new Date()) => select()
   .where('start_at', '<=', now)
   .orderBy('start_at', 'desc')
   .limit(1)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const getUpcomingContest = (now = new Date()) => select()
@@ -16,7 +16,7 @@ const getUpcomingContest = (now = new Date()) => select()
   .andWhere('end_at', '>', now)
   .orderBy('start_at', 'asc')
   .limit(1)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const referralCounts = (startAt, endAt) => db
@@ -33,7 +33,7 @@ const getContestLeaderboard = (startAt, endAt) => db
   .join('users as u', 'u.id', '=', 'rc.user_id')
   .orderBy([{ column: 'rc.points', order: 'desc' }, 'rc.last_referral'])
   .limit(5)
-  .map(toCamelCase);
+  .then((res) => res.map(toCamelCase));
 
 const getUserRank = (startAt, endAt, userId) => db
   .select(
@@ -47,7 +47,7 @@ const getUserRank = (startAt, endAt, userId) => db
   .from(referralCounts(startAt, endAt))
   .where('user_id', '=', userId)
   .andWhere('points', '>', 0)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const add = (startAt, endAt) => {

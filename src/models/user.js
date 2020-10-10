@@ -20,14 +20,14 @@ const mapUser = (user) => {
 const getById = (id) => select()
   .where('id', '=', id)
   .limit(1)
-  .map(mapUser)
+  .then((res) => res.map(mapUser))
   .then((res) => (res.length ? res[0] : null));
 
 const getByIdOrUsername = (id) => select()
   .where('id', '=', id)
   .orWhere('username', '=', id)
   .limit(1)
-  .map(mapUser)
+  .then((res) => res.map(mapUser))
   .then((res) => (res.length ? res[0] : null));
 
 const checkDuplicateEmail = (id, email) => db

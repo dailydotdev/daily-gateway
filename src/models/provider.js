@@ -7,14 +7,14 @@ const select = () => db.select('user_id', 'provider', 'provider_id', 'access_tok
 const getByProviderId = (providerId, provider) => select()
   .where('provider_id', '=', providerId).andWhere('provider', '=', provider)
   .limit(1)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const getByUserId = (userId) => select()
   .where('user_id', '=', userId)
   .orderBy('created_at', 'asc')
   .limit(1)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const add = (userId, provider, accessToken, providerId, expiresIn, refreshToken) => {

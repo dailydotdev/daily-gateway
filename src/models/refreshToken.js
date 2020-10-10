@@ -9,7 +9,7 @@ const getByToken = (token) => db.select('user_id', 'token')
   .from(table)
   .where('token', '=', token)
   .limit(1)
-  .map(toCamelCase)
+  .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
 const add = (userId, token) => {

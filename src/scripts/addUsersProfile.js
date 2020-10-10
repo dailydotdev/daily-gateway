@@ -65,7 +65,7 @@ const run = async () => {
     .orderBy('created_at')
     .offset(page * 1000)
     .limit(1000)
-    .map(toCamelCase);
+    .then((res) => res.map(toCamelCase));
   return fetchInfos(users, []);
 };
 
