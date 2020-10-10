@@ -24,6 +24,13 @@
     "url": "https://github.com/elegantmonkeys/daily-gateway/issues"
   },
   "homepage": "https://github.com/elegantmonkeys/daily-gateway#readme",
+  "mocha": {
+    "require": ["@babel/register", "test/setup"],
+    "ui": "bdd",
+    "recursive": ["test/integration", "test/unit"],
+    "timeout": 5000,
+    "exit": true
+  },
   "dependencies": {
     "@google-cloud/profiler": "^4.0.0",
     "@google-cloud/pubsub": "^2.2.0",
