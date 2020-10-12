@@ -4366,10 +4366,10 @@ koa-pino-logger@^3.0.0:
   dependencies:
     pino-http "^5.0.1"
 
-koa-proxies@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/koa-proxies/-/koa-proxies-0.8.1.tgz#717a5fae594a96f95818dfcadc30987e738034a1"
-  integrity sha512-h6hJGaeVQCfW53Mk7pQvCx1mIZzpGupCr+hkpMrdKUumWOm8X5yY2MPdW8j10fXFUAloFruO00ICzzH1Gh7gsQ==
+koa-proxies@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/koa-proxies/-/koa-proxies-0.11.0.tgz#43dde4260080f7cb0f284655f85cf654bbe9ec84"
+  integrity sha512-iXGRADBE0fM7g7AttNOlLZ/cCFKXeVMHbFJKIRb0dUCrSYXi02loyVSdBlKlBQ5ZfVKJLo9Q9FyqwVTp1poVVA==
   dependencies:
     http-proxy "^1.16.2"
     path-match "^1.2.4"
