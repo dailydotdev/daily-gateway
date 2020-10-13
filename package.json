@@ -77,6 +77,6 @@
     "nodemon": "^2.0.4",
     "sinon": "^4.0.1",
     "sinon-chai": "^3.5.0",
-    "supertest": "^3.0.0"
+    "supertest": "^5.0.0"
   }
 }
