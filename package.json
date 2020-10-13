@@ -38,7 +38,7 @@
     "@koa/cors": "2",
     "@sendgrid/client": "^7.2.6",
     "@sendgrid/mail": "^7.2.6",
-    "@slack/client": "^4.3.1",
+    "@slack/client": "^5.0.2",
     "busboy": "^0.3.1",
     "cloudinary": "^1.23.0",
     "jsonwebtoken": "^8.3.0",
