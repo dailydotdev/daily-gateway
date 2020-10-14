@@ -90,7 +90,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         roles: [],
-        reputation: 0,
+        reputation: 1,
         permalink: `http://localhost:5002/${res.body.id}`,
         registrationLink: 'http://localhost:5002/register',
         referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
@@ -163,7 +163,7 @@ describe('users routes', () => {
         premium: false,
         acceptedMarketing: true,
         roles: ['admin', 'moderator'],
-        reputation: 0,
+        reputation: 1,
         permalink: `http://localhost:5002/${res.body.id}`,
         registrationLink: 'http://localhost:5002/register',
         referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
@@ -297,7 +297,7 @@ describe('users routes', () => {
         infoConfirmed: true,
         premium: false,
         acceptedMarketing: true,
-        reputation: 0,
+        reputation: 1,
         referralLink: 'https://api.daily.dev/get?r=id',
         username: 'john',
       });
@@ -326,7 +326,7 @@ describe('users routes', () => {
         infoConfirmed: true,
         premium: false,
         acceptedMarketing: true,
-        reputation: 0,
+        reputation: 1,
         referralLink: 'https://api.daily.dev/get?r=id',
         username: 'john',
       });
@@ -468,7 +468,7 @@ describe('users routes', () => {
         username: 'idoshamun',
         bio: 'My bio',
         premium: false,
-        reputation: 0,
+        reputation: 1,
       });
     });
 
@@ -488,7 +488,7 @@ describe('users routes', () => {
         username: 'idoshamun',
         bio: 'My bio',
         premium: false,
-        reputation: 0,
+        reputation: 1,
       });
     });
   });

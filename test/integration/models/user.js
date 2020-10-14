@@ -41,7 +41,7 @@ describe('user model', () => {
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
-      reputation: 0,
+      reputation: 1,
       referralLink: 'https://api.daily.dev/get?r=1',
     });
   });
@@ -56,7 +56,7 @@ describe('user model', () => {
       infoConfirmed: false,
       premium: false,
       acceptedMarketing: true,
-      reputation: 0,
+      reputation: 1,
       referralLink: 'https://api.daily.dev/get?r=3',
     });
   });
