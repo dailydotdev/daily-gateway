@@ -18,7 +18,7 @@ export const getTrackingId = (ctx) => {
   return ctx.trackingId;
 };
 
-export default function (ctx, next) {
+export default function verifyTracking(ctx, next) {
   if (!ctx.userAgent.isBot && !ctx.state.service) {
     let userId = getTrackingId(ctx);
     if (ctx.state.user) {
