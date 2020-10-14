@@ -43,7 +43,7 @@
     "cloudinary": "^1.23.0",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.21.6",
-    "koa": "^2.7.0",
+    "koa": "^2.13.0",
     "koa-bodyparser": "^4.2.0",
     "koa-context-validator": "^0.4.1",
     "koa-jwt": "^3.3.2",
