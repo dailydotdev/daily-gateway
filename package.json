@@ -41,7 +41,7 @@
     "@google-cloud/trace-agent": "^5.1.1",
     "@koa/cors": "2",
     "@sendgrid/client": "^7.2.6",
-    "@sendgrid/mail": "^7.2.6",
+    "@sendgrid/mail": "^7.3.0",
     "@slack/client": "^5.0.2",
     "busboy": "^0.3.1",
     "cloudinary": "^1.23.0",
