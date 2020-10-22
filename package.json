@@ -60,7 +60,7 @@
     "pino": "^6.7.0",
     "request": "^2.85.0",
     "request-promise-native": "^1.0.9",
-    "shortid": "^2.2.15"
+    "shortid": "^2.2.16"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
