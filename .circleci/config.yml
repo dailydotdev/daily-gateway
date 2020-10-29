@@ -7,6 +7,27 @@ jobs:
   build:
     docker:
       - image: circleci/node:14.13.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Build
+          command: yarn build
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  test:
+    docker:
+      - image: circleci/node:14.13.0
       - image: mysql:5.7
         environment:
           MYSQL_DATABASE: test
@@ -15,13 +36,6 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install dependencies
-          command: yarn install
-      - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
       - run:
           name: Wait for MySQL
           command: |
@@ -50,13 +64,6 @@ jobs:
           path: ./test-results
       - store_artifacts:
           path: ./test-results
-      - run:
-          name: Build
-          command: yarn build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - build
   build_and_push_docker:
     machine: true
     steps:
@@ -116,6 +123,12 @@ workflows:
   build:
     jobs:
       - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
       - build_and_push_docker:
           requires:
             - build
