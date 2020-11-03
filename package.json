@@ -46,7 +46,7 @@
     "busboy": "^0.3.1",
     "cloudinary": "^1.23.0",
     "jsonwebtoken": "^8.3.0",
-    "knex": "^0.21.11",
+    "knex": "^0.21.12",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.2.0",
     "koa-context-validator": "^0.4.1",
