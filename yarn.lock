@@ -910,10 +910,10 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/precise-date/-/precise-date-2.0.3.tgz#14f6f28ce35dabf3882e7aeab1c9d51bd473faed"
   integrity sha512-+SDJ3ZvGkF7hzo6BGa8ZqeK3F6Z4+S+KviC9oOK+XCs3tfMyJCh/4j93XIWINgMMDIh9BgEvlw4306VxlXIlYA==
 
-"@google-cloud/profiler@^4.0.0":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@google-cloud/profiler/-/profiler-4.0.3.tgz#8c0572821dc8c05593012aa35ba1db3b10cb2fdc"
-  integrity sha512-YFjoa37DpKY92fqQrY285yTACj3WB0Dby9RMRTsFFSgd+WK3PCsNJ18xrNgD/RJuLttw6eMXESNgj7QuwEkoog==
+"@google-cloud/profiler@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/profiler/-/profiler-4.1.0.tgz#6f5d5ea864c4da5b375773348e454a9c06958983"
+  integrity sha512-9e1zXRctLSUHAoAsFGwE4rS28fr0siiG+jXl5OpwTK8ZAUlxb70aosHaZGdsv8YXrYKjuiufjRZ/OXCs0XLI9g==
   dependencies:
     "@google-cloud/common" "^3.0.0"
     "@types/console-log-level" "^1.4.0"
@@ -923,7 +923,7 @@
     extend "^3.0.2"
     gcp-metadata "^4.0.0"
     parse-duration "^0.4.4"
-    pprof "2.0.0"
+    pprof "3.0.0"
     pretty-ms "^7.0.0"
     protobufjs "~6.10.0"
     semver "^7.0.0"
@@ -1339,11 +1339,6 @@
   version "14.11.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.11.8.tgz#fe2012f2355e4ce08bca44aeb3abbb21cf88d33f"
   integrity sha512-KPcKqKm5UKDkaYPTuXSx8wEP7vE9GnuaXIZKijwRYcePpZFDVuy2a57LarFKiORbHOuTOOwYzxVxcUzsh2P2Pw==
-
-"@types/node@^10.1.0":
-  version "10.17.35"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.35.tgz#58058f29b870e6ae57b20e4f6e928f02b7129f56"
-  integrity sha512-gXx7jAWpMddu0f7a+L+txMplp3FnHl53OhQIF9puXKq3hDGY/GjH+MF04oWnV/adPSCrbtHumDCFwzq2VhltWA==
 
 "@types/node@^12.12.47":
   version "12.12.62"
@@ -4602,7 +4597,7 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
+mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
@@ -4718,7 +4713,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-needle@^2.2.1:
+needle@^2.5.0:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/needle/-/needle-2.5.2.tgz#cf1a8fce382b5a280108bba90a14993c00e4010a"
   integrity sha512-LbRIwS9BfkPvNwNHlsA41Q29kL2L/6VaOJ0qisM5lLWsTV3nP15abO5ITL6L81zqFhzjRKDAYjpcBcwM0AVvLQ==
@@ -4776,14 +4771,14 @@ node-modules-regexp@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
 
-node-pre-gyp@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
-  integrity sha512-+CvDC7ZttU/sSt9rFjix/P05iS43qHCOOGzcr3Ry99bXG7VX953+vFyEuph/tfqoYu8dttBkE86JSKBO2OzcxA==
+node-pre-gyp@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.16.0.tgz#238fa540364784e5015dfcdba78da3937e18dbdc"
+  integrity sha512-4efGA+X/YXAHLi1hN8KaPrILULaUn2nWecFrn1k2I+99HpoyvcOGEbtcOxpDiUwPF2ZANMJDh32qwOUPenuR1g==
   dependencies:
     detect-libc "^1.0.2"
-    mkdirp "^0.5.1"
-    needle "^2.2.1"
+    mkdirp "^0.5.3"
+    needle "^2.5.0"
     nopt "^4.0.1"
     npm-packlist "^1.1.6"
     npmlog "^4.0.2"
@@ -5076,7 +5071,7 @@ p-limit@^2.0.0, p-limit@^2.2.0:
   dependencies:
     p-try "^2.0.0"
 
-p-limit@^3.0.2:
+p-limit@^3.0.0, p-limit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.0.2.tgz#1664e010af3cadc681baafd3e2a437be7b0fb5fe"
   integrity sha512-iwqZSOoWIW+Ew4kAGUlN16J4M7OB3ysMLSZtnhmqx7njIHFPlxWBX8xo3lVTyFVq6mI/lL9qt2IsN1sHwaxJkg==
@@ -5373,19 +5368,19 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
-pprof@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pprof/-/pprof-2.0.0.tgz#b6ff163349e2226db118eafd5bb45f2c53bf24f6"
-  integrity sha512-a3ngxqmo6jw+SyPHoxkHUwPKSoYjZoSNFfIpwUhyorFMsON9vh7Y1/kG+o+mEjt6HMpbU9FczFiiRV68VFjUbg==
+pprof@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/pprof/-/pprof-3.0.0.tgz#a991cd2ba8628b4954446c24e365856894d21aa5"
+  integrity sha512-uPWbAhoH/zvq1kM3/Fd/wshb4D7sLlGap8t6uCTER4aZRWqqyPYgXzpjWbT0Unn5U25pEy2VREUu27nQ9o9VPA==
   dependencies:
     bindings "^1.2.1"
     delay "^4.0.1"
     findit2 "^2.2.3"
     nan "^2.14.0"
-    node-pre-gyp "^0.14.0"
-    p-limit "^2.0.0"
+    node-pre-gyp "^0.16.0"
+    p-limit "^3.0.0"
     pify "^5.0.0"
-    protobufjs "~6.8.6"
+    protobufjs "~6.10.0"
     source-map "^0.7.3"
     split "^1.0.1"
 
@@ -5438,25 +5433,6 @@ protobufjs@^6.8.6, protobufjs@^6.9.0, protobufjs@~6.10.0:
     "@protobufjs/utf8" "^1.1.0"
     "@types/long" "^4.0.1"
     "@types/node" "^13.7.0"
-    long "^4.0.0"
-
-protobufjs@~6.8.6:
-  version "6.8.9"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.8.9.tgz#0b1adbcdaa983d369c3d9108a97c814edc030754"
-  integrity sha512-j2JlRdUeL/f4Z6x4aU4gj9I2LECglC+5qR2TrWb193Tla1qfdaNQTZ8I27Pt7K0Ajmvjjpft7O3KWTGciz4gpw==
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/long" "^4.0.0"
-    "@types/node" "^10.1.0"
     long "^4.0.0"
 
 psl@^1.1.28:
