@@ -1,0 +1,3 @@
+name: gateway
+runtime: nodejs
+description: Infrastructure for daily-gateway

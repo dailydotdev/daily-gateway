@@ -1,0 +1,66 @@
+config:
+  gateway:env:
+    accessSecret:
+      secure: AAABAOgGOPp2psPjjfgQHY7iQdsYdarlUFcI2qUSUSDhljnLHuXjuQc0qDG0mRbgVI0dXFkX0aTlRZ5+68zacA==
+    apiSecret:
+      secure: AAABAHQnHsfEQMSAZQTxPGaQDcrBRcfzyt0k+QSgtkLpYyDea1jkA20rW+VsbtDDY8jndj21NIiTJVws+6OjYA==
+    apiUrl:
+      secure: AAABAB/mdJtHwEJHG7a1sSDbZ2DOhtZ+vXWPLb733WTuoLcyczvEOyOBs9eS3idmDgsqNhN2FKPbks22KnGTjaLcjA==
+    besticonUrl:
+      secure: AAABANpo82ytZdV9iRfHt/WmNxYmWsYo8NJo434UWgdTEJVAkf8wv+mL+gm8dVSzrZsiDcnWUba/6YLv56mnH5hkM5TfEqvl
+    bluesnapApiKey:
+      secure: AAABAE9336OB57NA7G/WNNwosVg54gsWU14xH9yogu1+DOUIcLO7Q31dfBTy4KLxy6xtG2bVByjXA5joL6N/jYpu3DeFiyfFShlYVYsF4hilfKOv0iJUqhQxr8/WS4Xt+X/VG6L0
+    bluesnapApiUrl:
+      secure: AAABAHGSkEKkdEBdxY/zpeUg1bje7TDFguwSji6nAbo+5BCCvdDxpnI4V9kGg25HuNZ4rP1nzg==
+    bluesnapCheckoutUrl:
+      secure: AAABADnztCx0o8K767NJm992acdoQvMRnhOOulJTPSHmVDboKdiRPlaj7/TNp7+D70Ds86h+6uWtvzbaow==
+    bluesnapIp:
+      secure: AAABAGnzry013AduR6s9ett9oOUtgF1fDTO2SrXMgx5Ijy7WuLsn3fAr6xfmjdxwrD4LJHr5Mu8EWcO0rBuVURgD51Iapx3l91rHn9zbh/AmghKVhxRTtrJHxktSfpxpHgiYOhAgUGr91nXZu/k7FmusUqLVq5ZxsZ+zTQ==
+    bluesnapStoreId:
+      secure: AAABAHJWTfyx4FPIP8HqT5dh68pNb8eXQ6RnezbxQKWXKNVDe5g=
+    cloudinaryUrl:
+      secure: AAABAAXFu265TU9v6LtaPoskQIquV8kWfeothcIrA7tEUSIgI9YHU/tjHureUGzZLPihzvuVPgXgCIHDc4qvMvrbgJiEO0weaLzHXERpXB3lpF4jte036YwVAOb0AKzyHfs=
+    cookiesKey:
+      secure: AAABANqssCoeQV1T/2yY7ifRwbFSLJYVxQlUe1HfEdSegHSDrt6OKCq2JRDb2Xmczs8Uk5pUzKuG4ZSN0FlJ1Vg2DnGTH/pAA83oBHa92A==
+    corsOrigin:
+      secure: AAABAPmIyZyHupuwJVNh52krFiOtKu2OoqKE3S9x6d30hzJcjzuW1JGOG0AyhBrgS8lku5C5EZlswlwEwWLEB44G7qh7+NzQ53+nnykXG1djvdsGx8UOFT+Vqps0rhyai6IBsyKvqALDTlhQNVYBsjb3WIUbmUs+DDE2BYoF8QCEHOJpHHpKJZlCvtLT/g6OnIXa/jmF4r3/15qDhF8MMq4ZujWASau9f49RAVnOAnOHFJKVRKE9M09BvATeZ09TOEW6jhbBIoHTcGXQgichK5e3Wjz37unklu+aw0VSINjUwJveAvHd0lVAkIGr31/ZsSdWVd+c
+    githubClientId:
+      secure: AAABACbheY5sozmUuMtYbrq8iV3hUqW5bHbVMaD93Hj40LiLzPJ3d6YeIJMqv5ZQBYmXBg==
+    githubClientSecret:
+      secure: AAABABAC6LULOKkNKezTqWV639eue633B6vSFsVVvM/alvRl1MIuW+Z3bNDJZGrdT7m0jT3kSkhVf7qiNsM00GB+/WeAcOJX
+    googleClientId:
+      secure: AAABAFT0a/8pdSNdV+SPcGf63JqzVWSPQ9HnaMD+o9rLkGd2mTeHX7cZW9x1oacXCehxwRLLdmt04+F/jxfAvvplhz7OLFh9cnMCZGHkalHv/62eemN88vdl793co64yepnKRFDpbw0=
+    googleClientSecret:
+      secure: AAABADC/vb4x8E8N3wVqxhq7w40emR/c9kKtwWh+iMBm4NO0yl6G3LETRRHlpFOfOH4gNf/UN44=
+    jwtAudience:
+      secure: AAABAG7GS1l+a0O7bk6MVGwYmtk9gdADABLF/ZzYjwAxq9XqUw==
+    jwtIssuer:
+      secure: AAABAO5QD9ZgtrDTs+HRPj1ceW68t45lrkc5BuCNrAcIlcbHMQITuyI=
+    jwtSecret:
+      secure: AAABANCCeArTMMer7h3/MMcQCgWfGnBeJ8rICqwCs1zIapUKGY/yoo9HjsUtThAGCEk33w==
+    monetizationUrl:
+      secure: AAABAFEbAAYRBktbav+OJPW+T2fS0wjfkDozlV8w5DMBQIerfB90CnODXPyW/uofmpVf+PN+GpYUeBYUfqvR1uKBSnHjQpoF90Y8tg==
+    mysqlDatabase:
+      secure: AAABABKrWGpfvg3lEUkoIxxdN9PF6F6WGBafmZPFTnKYphP/Cuh1
+    mysqlHost:
+      secure: AAABAL9b3C11dGoPTtR1P4GOtyo04fVnDuNoiJ/vankKTS0EqJnLt2g=
+    mysqlPassword:
+      secure: AAABALZpv3CAwYj7puj+WIERyXVr9mL7OIB9gqW7enQB4UHWHiAn9+/TReR0et0=
+    mysqlUser:
+      secure: AAABAOFaUlnuzvhtnixo3BmdM/MXb19GrB2e8X4LY/YDfIsLzLPJL30O
+    primaryAuthOrigin:
+      secure: AAABAPgfSLaY8dovND6oiOibCpQMLkOM5mnmVr9y91Hg3eSztUZTONPUEDzyQnDFN+2DDRE=
+    redirectorUrl:
+      secure: AAABAEAyW3AUFYnWCDUQ+o0ivIlZ08WzPVaD2SeBd8WGDR/f+mQFx1NZ11dLC5NWJFUtX7Xxp63tZ6iseM5oRyRXYJjSWiKKXQg=
+    scraperSecret:
+      secure: AAABADwlJPl9DLH+dCCKz+MR4gVpDNc8Nn7XnUldradO2QSy+1VS2BJO2+lcvDBO9EE9j2g/+N6EUSNiO6SoClxR571+by7E/ZlVOjNUN4IRGrz79eFDFIi6JdxQ9cA=
+    scraperUrl:
+      secure: AAABAOWJkaTK3zzMW3Wty8VfWdU1fHEM6+wIqxRBFo4YKmcyiLis5h3LhAXqYGzk3b+aO3tkrmfPxUr5Kt+WR3tddibol6M=
+    sendgridApiKey:
+      secure: AAABAL2fT0TA7VJ86QZJcEtLjbGqiykyrtPYQrhbZWunhI9LHo1jvlJdtfeZd23LUg1KEgvEgrWhlfaFCWuTjhhrEJ10Sd5nKyDexnXWTnLX9xjl8G6J/hE+ni+oAAxNJpIxnjg=
+    slackWebhook:
+      secure: AAABAAFLY0icakYeqt+Md5z4GPC5KR7hMz+AUYrNsTdYliWLoGxYHLqy9DIohJ489N8bxVE+XVTL9tDdRk/CdgJ4FLCwIKGecSiuLTBnv2YBXVHKdEP6AJXevkzwjBXBS9RD/og8dORkiys6nlG7fsM=
+    webappOrigin:
+      secure: AAABAIqlleKQsN1FpB1M2kfuP7qap03jqkB+QfZP4EoApt+twCEs2nbqCT07ljv700WuVRs=
+  gcp:project: devkit-prod
+  gcp:region: us-central1
