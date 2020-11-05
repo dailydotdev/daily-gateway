@@ -1,24 +1,11 @@
-import { pubsub } from '../pubsub';
 import slackNotification from './slackNotification';
 import updateMailingList from './updateMailingList';
 import updateReputation from './updateReputation';
-import config from '../config';
 
-const initializeWorker = async (worker, log) => {
-  const topic = pubsub.topic(worker.topic);
-  const subscription = topic.subscription(worker.subscription);
-  if (subscription.get) {
-    await subscription.get({ autoCreate: true });
-  }
-  log.info(`waiting for messages in ${topic.name}`);
-  subscription.on('message', (message) => worker.handler(message, log));
-};
+const workers = [
+  slackNotification,
+  updateMailingList,
+  updateReputation,
+];
 
-// eslint-disable-next-line import/prefer-default-export
-export const startWorkers = async (log) => {
-  if (config.env === 'production') {
-    await initializeWorker(slackNotification, log);
-    await initializeWorker(updateMailingList, log);
-    await initializeWorker(updateReputation, log);
-  }
-};
+export default workers;

@@ -43,3 +43,13 @@ export class ForbiddenError extends Error {
     this.name = this.constructor.name;
   }
 }
+
+export class CustomError extends Error {
+  constructor(message, status) {
+    super(message);
+    Error.captureStackTrace(this, this.constructor);
+
+    this.message = message;
+    this.status = status;
+  }
+}

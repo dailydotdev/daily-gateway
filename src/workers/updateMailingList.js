@@ -1,14 +1,13 @@
-import { envBasedName, messageToJson, userUpdatedTopic } from '../pubsub';
+import { messageToJson } from '../pubsub';
 import { getContactIdByEmail, removeUserFromList, updateUserContact } from '../mailing';
 
 const worker = {
-  topic: userUpdatedTopic.name,
-  subscription: envBasedName('user-updated-mailing'),
+  topic: 'user-updated',
+  subscription: 'user-updated-mailing',
   handler: async (message, log) => {
     const data = messageToJson(message);
     if (!data.newProfile.email || !data.newProfile.email.length) {
       log.warn({ messageId: message.id, userId: data.user.id }, 'no email in user-updated message');
-      message.ack();
       return;
     }
     try {
@@ -22,10 +21,9 @@ const worker = {
         lists.push('53d09271-fd3f-4e38-ac21-095bf4f52de6');
       }
       await updateUserContact(data.newProfile, data.user.email, lists);
-      message.ack();
     } catch (err) {
       log.error({ messageId: message.id, err, userId: data.user.id }, 'failed to update user to mailing list');
-      message.nack();
+      throw err;
     }
   },
 };
