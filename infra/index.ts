@@ -1,9 +1,9 @@
 import * as gcp from '@pulumi/gcp';
 import {
   addIAMRolesToServiceAccount,
-  createEnvVarsFromSecret,
+  createEnvVarsFromSecret, getCloudRunPubSubInvoker,
   infra,
-  location,
+  location, serviceAccountToMember,
 } from './helpers';
 import { Output } from '@pulumi/pulumi';
 
@@ -31,6 +31,8 @@ addIAMRolesToServiceAccount(
 
 const secrets = createEnvVarsFromSecret(name);
 
+const image = `gcr.io/daily-ops/daily-${name}:1e744717be0d36f77ee8d2025d60020ca7db2b9f`;
+
 const service = new gcp.cloudrun.Service(name, {
   name,
   location,
@@ -45,8 +47,7 @@ const service = new gcp.cloudrun.Service(name, {
       serviceAccountName: serviceAccount.email,
       containers: [
         {
-          image:
-            `gcr.io/daily-ops/daily-${name}:93c1236231fd5fc0db61240d6d13287b944afb18`,
+          image,
           resources: { limits: { cpu: '1', memory: '512Mi' } },
           envs: secrets,
         },
@@ -55,9 +56,65 @@ const service = new gcp.cloudrun.Service(name, {
   },
 });
 
+const bgService = new gcp.cloudrun.Service(`${name}-background`, {
+  name: `${name}-background`,
+  location,
+  template: {
+    metadata: {
+      annotations: {
+        'autoscaling.knative.dev/maxScale': '20',
+        'run.googleapis.com/vpc-access-connector': vpcConnector.name,
+      },
+    },
+    spec: {
+      serviceAccountName: serviceAccount.email,
+      containers: [
+        {
+          image,
+          resources: {limits: {cpu: '1', memory: '256Mi'}},
+          envs: secrets,
+          args: ['background'],
+        },
+      ],
+    },
+  },
+});
+
+export const serviceUrl = service.statuses[0].url;
+export const bgServiceUrl = bgService.statuses[0].url;
+
 new gcp.cloudrun.IamMember(`${name}-public`, {
   service: service.name,
   location,
   role: 'roles/run.invoker',
   member: 'allUsers',
 });
+
+const cloudRunPubSubInvoker = getCloudRunPubSubInvoker();
+new gcp.cloudrun.IamMember(`${name}-pubsub-invoker`, {
+  service: bgService.name,
+  location,
+  role: 'roles/run.invoker',
+  member: serviceAccountToMember(cloudRunPubSubInvoker)
+});
+
+const workers = [
+  { topic: 'user-updated', subscription: 'user-updated-mailing' },
+  { topic: 'user-registered', subscription: 'user-registered-slack' },
+  { topic: 'user-reputation-updated', subscription: 'update-reputation' },
+]
+
+workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscription}`, worker.topic === 'user-registered' ? {
+  topic: worker.topic,
+  name: worker.subscription,
+  pushConfig: {
+    pushEndpoint: bgServiceUrl.apply((url) => `${url}/${worker.subscription}`),
+    oidcToken: {
+      serviceAccountEmail: cloudRunPubSubInvoker.email,
+    }
+  },
+  retryPolicy: {
+    minimumBackoff: '10s',
+    maximumBackoff: '600s',
+  }
+} : {topic: worker.topic, name: worker.subscription}));
