@@ -104,7 +104,7 @@ const workers = [
   { topic: 'user-reputation-updated', subscription: 'update-reputation' },
 ]
 
-workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscription}`, worker.topic === 'user-registered' ? {
+workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscription}`, {
   topic: worker.topic,
   name: worker.subscription,
   pushConfig: {
@@ -117,4 +117,4 @@ workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscr
     minimumBackoff: '10s',
     maximumBackoff: '600s',
   }
-} : {topic: worker.topic, name: worker.subscription}));
+}));

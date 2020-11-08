@@ -48,6 +48,7 @@ config:
       secure: AAABALZpv3CAwYj7puj+WIERyXVr9mL7OIB9gqW7enQB4UHWHiAn9+/TReR0et0=
     mysqlUser:
       secure: AAABAOFaUlnuzvhtnixo3BmdM/MXb19GrB2e8X4LY/YDfIsLzLPJL30O
+    nodeEnv: production
     primaryAuthOrigin:
       secure: AAABAPgfSLaY8dovND6oiOibCpQMLkOM5mnmVr9y91Hg3eSztUZTONPUEDzyQnDFN+2DDRE=
     redirectorUrl:
