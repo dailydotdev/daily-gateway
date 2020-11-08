@@ -1,6 +1,6 @@
 import * as gcp from '@pulumi/gcp';
 import {
-  addIAMRolesToServiceAccount,
+  addIAMRolesToServiceAccount, config,
   createEnvVarsFromSecret, getCloudRunPubSubInvoker,
   infra,
   location, serviceAccountToMember,
@@ -8,6 +8,8 @@ import {
 import { Output } from '@pulumi/pulumi';
 
 const name = 'gateway';
+
+const imageTag = config.require('tag');
 
 const vpcConnector = infra.getOutput('serverlessVPC') as Output<
   gcp.vpcaccess.Connector
@@ -31,7 +33,7 @@ addIAMRolesToServiceAccount(
 
 const secrets = createEnvVarsFromSecret(name);
 
-const image = `gcr.io/daily-ops/daily-${name}:1e744717be0d36f77ee8d2025d60020ca7db2b9f`;
+const image = `gcr.io/daily-ops/daily-${name}:${imageTag}`;
 
 const service = new gcp.cloudrun.Service(name, {
   name,
