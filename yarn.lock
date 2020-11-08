@@ -1148,7 +1148,7 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@sendgrid/client@^7.3.0", "@sendgrid/client@^7.4.0":
+"@sendgrid/client@^7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.4.0.tgz#07c26936f88ade43fb845ce00b37d882999c0a04"
   integrity sha512-KAZlEb1P8sATgBN+7hXgzaRF94nF9KQgDxQ6zUT1BV0kEsNtJQ2cs35sCtWt6AKKJrL0xPI/MsfcAJqom4YQBg==
@@ -1156,20 +1156,20 @@
     "@sendgrid/helpers" "^7.4.0"
     axios "^0.19.2"
 
-"@sendgrid/helpers@^7.3.0", "@sendgrid/helpers@^7.4.0":
+"@sendgrid/helpers@^7.4.0":
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.4.0.tgz#be98730c89c190c8873e2f25d868a13d26b75b25"
   integrity sha512-IQI2vemiJB0+X6bEp4HRG+0/wrzR2RDGnB5rwfq1CsPDrUFdJfxbE2zbGx//1GnlNwAtbHyc93ejU1m0KZr86w==
   dependencies:
     deepmerge "^4.2.2"
 
-"@sendgrid/mail@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.3.0.tgz#8c68aa2992412b9c03b97059af0bca90f912295a"
-  integrity sha512-05k7Xl0/5LCyMLGJwSNPsbNZ0ej6EwSbnRyP6CnCAq3MoVRSi7a7wDDPsxF3Gz7F24DVLp/fCN1DKDaZDQxxdw==
+"@sendgrid/mail@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.4.0.tgz#126de0f0fc7c62d5d609140261fd598b6291fee3"
+  integrity sha512-SAARsfbl50OEJ99LYGKfgrYiV5O6+23aeGJuEBTHHSwRZ6KhD3n1BjPeIejbqgbqYLZJfNLxyU3o5xRdJPp3zg==
   dependencies:
-    "@sendgrid/client" "^7.3.0"
-    "@sendgrid/helpers" "^7.3.0"
+    "@sendgrid/client" "^7.4.0"
+    "@sendgrid/helpers" "^7.4.0"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
