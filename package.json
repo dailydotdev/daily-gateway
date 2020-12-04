@@ -38,7 +38,7 @@
   "dependencies": {
     "@binxhealth/pino-stackdriver": "^3.0.0",
     "@google-cloud/profiler": "^4.1.0",
-    "@google-cloud/pubsub": "^2.6.0",
+    "@google-cloud/pubsub": "^2.7.0",
     "@google-cloud/trace-agent": "^5.1.1",
     "@koa/cors": "3",
     "@sendgrid/client": "^7.4.0",
