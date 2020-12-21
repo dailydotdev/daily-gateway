@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import db, {toCamelCase, toSnakeCase} from '../db';
-import {getReferralLink} from '../referrals';
+import db, { toCamelCase, toSnakeCase } from '../db';
+import { getReferralLink } from '../referrals';
 
 const table = 'users';
 
@@ -61,12 +61,12 @@ const update = (id, user) => db(table)
   .where('id', '=', id)
   .update(toSnakeCase({
     ..._.pick(user, ['name', 'email', 'image', 'company', 'title', 'infoConfirmed', 'premium', 'acceptedMarketing', 'username', 'bio', 'twitter', 'github', 'portfolio', 'hashnode']),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   }));
 
 const updateReputation = (id, reputation) => db(table)
   .where('id', '=', id)
-  .update({reputation});
+  .update({ reputation });
 
 export default {
   getById,
