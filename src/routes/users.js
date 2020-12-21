@@ -89,6 +89,7 @@ router.put(
       bio: string().allow(null).max(160),
       twitter: string().allow(null).regex(/^@?(\w){1,15}$/),
       github: string().allow(null).regex(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i),
+      hashnode: string().allow(null).regex(/^@?(\w){1,38}$/),
       portfolio: string().allow(null),
     }),
   }, { stripUnknown: true }),
@@ -123,6 +124,9 @@ router.put(
           }
           if (err.sqlMessage.indexOf('users_github_unique') > -1) {
             throw new ValidationError('github', 'github handle already exists');
+          }
+          if (err.sqlMessage.indexOf('users_hashnode_unique') > -1) {
+            throw new ValidationError('hashnode', 'hashnode handle already exists');
           }
         }
         throw err;

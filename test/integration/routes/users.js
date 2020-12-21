@@ -423,6 +423,29 @@ describe('users routes', () => {
       });
     });
 
+    it('should throw bad request on duplicate hashnode handle', async () => {
+      await userModel.add('id', 'John');
+      await userModel.add('id2', 'John2');
+      await userModel.update('id2', { hashnode: 'idoshamun' });
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', hashnode: 'IdoShamun', username: 'john',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'hashnode handle already exists',
+        field: 'hashnode',
+        reason: 'hashnode handle already exists',
+      });
+    });
+
     it('should throw bad request on invalid username', async () => {
       await userModel.add('id', 'John');
       const accessToken = await sign({ userId: 'id' }, null);
