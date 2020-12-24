@@ -86,7 +86,6 @@ describe('auth routes', () => {
 
       expect(res.body.newUser).to.equal(true);
       const model = await provider.getByUserId(res.body.id, 'github');
-      expect(model.accessToken).to.equal('token');
       expect(model.providerId).to.equal('github_id');
       const user = await userModel.getById(res.body.id);
       delete user.createdAt;
@@ -166,8 +165,6 @@ describe('auth routes', () => {
         .expect(200);
 
       expect(res.body.newUser).to.equal(false);
-      const model = await provider.getByUserId(res.body.id, 'github');
-      expect(model.accessToken).to.equal('token2');
     });
   });
 
@@ -216,7 +213,6 @@ describe('auth routes', () => {
 
       expect(res.body.newUser).to.equal(true);
       const model = await provider.getByUserId(res.body.id, 'github');
-      expect(model.accessToken).to.equal('token');
       expect(model.providerId).to.equal('github_id');
     });
 
@@ -278,8 +274,6 @@ describe('auth routes', () => {
         .expect(200);
 
       expect(res.body.newUser).to.equal(false);
-      const model = await provider.getByUserId(res.body.id, 'github');
-      expect(model.accessToken).to.equal('token2');
     });
   });
 

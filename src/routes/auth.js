@@ -63,10 +63,7 @@ const authenticateToken = async (ctx, redirectUri, providerName, providerCode) =
   if (userProvider) {
     setTrackingId(ctx, userProvider.userId);
     newUser = false;
-    [user] = await Promise.all([
-      userModel.getById(userProvider.userId),
-      provider.updateToken(userProvider.userId, providerName, res.access_token),
-    ]);
+    user = await userModel.getById(userProvider.userId);
   } else {
     const userId = getTrackingId(ctx);
     const hasEmail = profile.email && profile.email.indexOf('users.noreply.github.com') < 0;
@@ -75,11 +72,7 @@ const authenticateToken = async (ctx, redirectUri, providerName, providerCode) =
         userId, profile.name, hasEmail ? profile.email : undefined, profile.image || fallbackAvatar,
         ctx.cookies.get(config.cookies.referral.key, config.cookies.referral.opts),
       ),
-      provider.add(
-        userId, providerName, res.access_token, profile.id,
-        res.expires_in ? (new Date(Date.now() + (res.expires_in * 1000))) : null,
-        res.refresh_token,
-      ),
+      provider.add(userId, providerName, profile.id),
     ]);
     if (user.referral) {
       ctx.log.info({ userId: user.id, referral: user.referral }, 'referred user registered');

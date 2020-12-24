@@ -14,10 +14,7 @@ describe('provider model', () => {
     const model = await provider.add(
       fixture[0].userId,
       fixture[0].provider,
-      fixture[0].accessToken,
       fixture[0].providerId,
-      fixture[0].expiresIn,
-      fixture[0].refreshToken,
     );
 
     expect(model).to.deep.equal(fixture[0]);
@@ -27,10 +24,7 @@ describe('provider model', () => {
     await provider.add(
       fixture[0].userId,
       fixture[0].provider,
-      fixture[0].accessToken,
       fixture[0].providerId,
-      fixture[0].expiresIn,
-      fixture[0].refreshToken,
     );
     const model = await provider.getByUserId(fixture[0].userId);
     expect(model).to.deep.equal(fixture[0]);
@@ -40,24 +34,9 @@ describe('provider model', () => {
     await provider.add(
       fixture[0].userId,
       fixture[0].provider,
-      fixture[0].accessToken,
       fixture[0].providerId,
-      fixture[0].expiresIn,
-      fixture[0].refreshToken,
     );
     const model = await provider.getByProviderId(fixture[0].providerId, fixture[0].provider);
     expect(model).to.deep.equal(fixture[0]);
-  });
-
-  it('should update existing provider', async () => {
-    await provider.add(
-      fixture[0].userId,
-      fixture[0].provider,
-      fixture[0].accessToken,
-      fixture[0].providerId,
-      fixture[0].expiresIn,
-      fixture[0].refreshToken,
-    );
-    await provider.updateToken(fixture[0].userId, fixture[0].provider, 'new_token');
   });
 });
