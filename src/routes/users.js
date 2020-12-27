@@ -98,7 +98,7 @@ router.put(
       bio: string().allow(null).max(160),
       twitter: string().allow(null).regex(/^@?(\w){1,15}$/),
       github: string().allow(null).regex(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i),
-      hashnode: string().allow(null).regex(/^@?(\w){1,38}$/),
+      hashnode: string().allow(null).regex(/^@?[a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d])){0,38}$/),
       portfolio: string().allow(null),
     }),
   }, { stripUnknown: true }),
