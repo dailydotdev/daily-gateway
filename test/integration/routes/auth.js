@@ -7,7 +7,6 @@ import provider from '../../../src/models/provider';
 import userModel from '../../../src/models/user';
 import app from '../../../src';
 import { sign } from '../../../src/jwt';
-import refreshToken from '../../../src/models/refreshToken';
 import { generateChallenge } from '../../../src/auth';
 
 describe('auth routes', () => {
@@ -214,6 +213,9 @@ describe('auth routes', () => {
       expect(res.body.newUser).to.equal(true);
       const model = await provider.getByUserId(res.body.id, 'github');
       expect(model.providerId).to.equal('github_id');
+      const refreshTokens = await db.select('user_id').from('refresh_tokens');
+      expect(refreshTokens.length).to.equal(1);
+      expect(refreshTokens[0].user_id).to.equal(res.body.id);
     });
 
     it('should login the existing in user', async () => {
@@ -274,24 +276,6 @@ describe('auth routes', () => {
         .expect(200);
 
       expect(res.body.newUser).to.equal(false);
-    });
-  });
-
-  describe('refresh token', () => {
-    it('should throw 403 when no such refresh token', async () => {
-      await request
-        .post('/v1/auth/refresh')
-        .send({ refreshToken: 'refresh' })
-        .expect(403);
-    });
-
-    it('should send a new access token', async () => {
-      await refreshToken.add('user', 'refresh2');
-
-      await request
-        .post('/v1/auth/refresh')
-        .send({ refreshToken: 'refresh2' })
-        .expect(200);
     });
   });
 });

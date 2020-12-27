@@ -10,13 +10,16 @@ describe('refresh token model', () => {
     return migrate();
   });
 
-  it('should add new refresh token to db', async () => {
+  it('should add a new encrypted refresh token to db', async () => {
     const model = await refreshToken.add(
       fixture[0].userId,
       fixture[0].token,
     );
 
-    expect(model).to.deep.equal(fixture[0]);
+    expect(model).to.deep.equal({
+      ...fixture[0],
+      token: refreshToken.encrypt(fixture[0].token),
+    });
   });
 
   it('should fetch refresh token by token', async () => {
@@ -25,6 +28,9 @@ describe('refresh token model', () => {
       fixture[0].token,
     );
     const model = await refreshToken.getByToken(fixture[0].token);
-    expect(model).to.deep.equal(fixture[0]);
+    expect(model).to.deep.equal({
+      ...fixture[0],
+      token: refreshToken.encrypt(fixture[0].token),
+    });
   });
 });

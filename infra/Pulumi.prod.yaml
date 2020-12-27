@@ -53,6 +53,10 @@ config:
       secure: AAABAPgfSLaY8dovND6oiOibCpQMLkOM5mnmVr9y91Hg3eSztUZTONPUEDzyQnDFN+2DDRE=
     redirectorUrl:
       secure: AAABAEAyW3AUFYnWCDUQ+o0ivIlZ08WzPVaD2SeBd8WGDR/f+mQFx1NZ11dLC5NWJFUtX7Xxp63tZ6iseM5oRyRXYJjSWiKKXQg=
+    refreshTokenSalt:
+      secure: AAABAN8fYWhqDOfEsFnP7c80sAwpRlT1mcikAj1SkXD9+lo3kSdRZYXB3N1BgY2DnTgy1C9F5SiU
+    refreshTokenSecret:
+      secure: AAABAL7L1udPzELeSerIZQFs5WXLkwqGPuI3b5YRHyla+jtNC/Ovs7eLsWSZ8bSgE089ex7/4QXl
     scraperSecret:
       secure: AAABADwlJPl9DLH+dCCKz+MR4gVpDNc8Nn7XnUldradO2QSy+1VS2BJO2+lcvDBO9EE9j2g/+N6EUSNiO6SoClxR571+by7E/ZlVOjNUN4IRGrz79eFDFIi6JdxQ9cA=
     scraperUrl:

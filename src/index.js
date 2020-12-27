@@ -42,9 +42,13 @@ app.use(errorHandler());
 app.use(verifyJwtMiddleware);
 // Cookie based authentication
 app.use(async (ctx, next) => {
-  const cookie = ctx.cookies.get(config.cookies.auth.key);
-  if (!ctx.state.user && cookie) {
-    ctx.state.user = await verifyJwt(cookie);
+  try {
+    const cookie = ctx.cookies.get(config.cookies.auth.key);
+    if (!ctx.state.user && cookie) {
+      ctx.state.user = await verifyJwt(cookie);
+    }
+  } catch (err) {
+    // JWT is invalid - no need to do anything just not authorize
   }
   return next();
 });

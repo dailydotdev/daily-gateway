@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { ForbiddenError, ValidationError } from '../errors';
 import provider from '../models/provider';
 import userModel from '../models/user';
+import refreshTokenModel from '../models/refreshToken';
 import role from '../models/role';
 import visit from '../models/visit';
 import { getTrackingId, setTrackingId } from '../tracking';
@@ -31,6 +32,17 @@ router.get(
   async (ctx) => {
     let visitId;
     const trackingId = getTrackingId(ctx);
+    const refreshToken = ctx.cookies.get(config.cookies.refreshToken.key);
+    let shouldRefreshToken = false;
+    if (refreshToken) {
+      const refreshTokenObject = await refreshTokenModel.getByToken(refreshToken);
+      if (refreshTokenObject) {
+        shouldRefreshToken = true;
+        ctx.state.user = { userId: refreshTokenObject.userId };
+      } else {
+        throw new ForbiddenError();
+      }
+    }
     if (ctx.state.user) {
       const { userId } = ctx.state.user;
       visitId = userId;
@@ -45,14 +57,11 @@ router.get(
         throw new ForbiddenError();
       }
 
-      if (!ctx.userAgent.isBot && !ctx.state.service) {
-        // Refresh the auth cookie
-        await setAuthCookie(ctx, user, roles);
-      }
+      const accessToken = shouldRefreshToken ? await setAuthCookie(ctx, user, roles) : undefined;
 
       ctx.status = 200;
       ctx.body = {
-        ...user, providers: [userProvider.provider], roles, permalink: `${config.webappOrigin}/${user.username || user.id}`,
+        ...user, providers: [userProvider.provider], roles, permalink: `${config.webappOrigin}/${user.username || user.id}`, accessToken,
       };
       if (!user.infoConfirmed) {
         ctx.body = {
@@ -176,6 +185,10 @@ router.post(
     ctx.cookies.set(
       config.cookies.auth.key,
       undefined, addSubdomainOpts(ctx, config.cookies.auth.opts),
+    );
+    ctx.cookies.set(
+      config.cookies.refreshToken.key,
+      undefined, addSubdomainOpts(ctx, config.cookies.refreshToken.opts),
     );
     ctx.cookies.set(
       config.cookies.referral.key,

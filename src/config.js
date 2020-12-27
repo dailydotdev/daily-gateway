@@ -30,7 +30,7 @@ const config = {
     secret: process.env.COOKIES_KEY,
     tracking: {
       opts: {
-        maxAge: 1000 * 60 * 60 * 24 * 365,
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         overwrite: true,
         httpOnly: false,
         signed: false,
@@ -41,7 +41,7 @@ const config = {
     },
     auth: {
       opts: {
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        maxAge: 1000 * 60 * 15,
         overwrite: true,
         httpOnly: true,
         signed: true,
@@ -60,6 +60,17 @@ const config = {
         sameSite: 'lax',
       },
       key: 'da4',
+    },
+    refreshToken: {
+      opts: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        overwrite: true,
+        httpOnly: true,
+        signed: true,
+        secure: env === 'production',
+        sameSite: 'lax',
+      },
+      key: 'da5',
     },
   },
   cors: {
@@ -102,6 +113,10 @@ const config = {
   accessSecret: process.env.ACCESS_SECRET || 'topsecret',
   primaryAuthOrigin: process.env.PRIMARY_AUTH_ORIGIN,
   webappOrigin: process.env.WEBAPP_ORIGIN || 'http://localhost:5002',
+  refreshToken: {
+    secret: process.env.REFRESH_TOKEN_SECRET,
+    salt: process.env.REFRESH_TOKEN_SALT,
+  },
 };
 
 export default config;

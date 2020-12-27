@@ -6,6 +6,8 @@ import db, { migrate } from '../../../src/db';
 import app from '../../../src';
 import role from '../../../src/models/role';
 import userModel from '../../../src/models/user';
+import provider from '../../../src/models/provider';
+import refreshTokenModel from '../../../src/models/refreshToken';
 import { sign } from '../../../src/jwt';
 
 describe('users routes', () => {
@@ -168,6 +170,42 @@ describe('users routes', () => {
         registrationLink: 'http://localhost:5002/register',
         referralLink: `https://api.daily.dev/get?r=${res.body.id}`,
       });
+    });
+
+    it('should not refresh access token when refresh token is not available', async () => {
+      await userModel.add('id', 'John');
+      await provider.add('id', 'github', 'id');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .get('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .expect(200);
+
+      expect(res.body.accessToken).to.equal(undefined);
+    });
+
+    it('should refresh access token when refresh token is available', async () => {
+      await userModel.add('id', 'John');
+      await provider.add('id', 'github', 'id');
+      await refreshTokenModel.add('id', 'refresh');
+
+      const res = await request
+        .get('/v1/users/me')
+        .set('Cookie', ['da5=refresh'])
+        .expect(200);
+
+      expect(res.body.accessToken).to.be.ok;
+    });
+
+    it('should throw forbidden error when refresh token is not valid', async () => {
+      await userModel.add('id', 'John');
+      await provider.add('id', 'github', 'id');
+
+      await request
+        .get('/v1/users/me')
+        .set('Cookie', ['da5=refresh'])
+        .expect(403);
     });
   });
 

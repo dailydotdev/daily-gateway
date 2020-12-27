@@ -3,14 +3,14 @@ import rp from 'request-promise-native';
 import validator, { object, string, boolean } from 'koa-context-validator';
 import config from '../config';
 import provider from '../models/provider';
-import refreshToken from '../models/refreshToken';
+import refreshTokenModel from '../models/refreshToken';
 import userModel from '../models/user';
 import { fetchProfile } from '../profile';
 import { sign as signJwt, verify as verifyJwt } from '../jwt';
 import { getTrackingId, setTrackingId } from '../tracking';
 import { ForbiddenError } from '../errors';
 import { generateChallenge } from '../auth';
-import { setAuthCookie } from '../cookies';
+import { addSubdomainOpts, setAuthCookie } from '../cookies';
 import { publishEvent, userRegisteredTopic } from '../pubsub';
 
 const router = Router({
@@ -25,6 +25,15 @@ const providersConfig = {
 const allowedOrigins = config.cors.origin.split(',');
 const fallbackAvatar = 'https://res.cloudinary.com/daily-now/image/upload/v1594823750/placeholders/avatar.jpg';
 const primaryRedirectUri = `${config.primaryAuthOrigin}/v1/auth/callback`;
+
+const generateRefreshToken = async (ctx, userId) => {
+  const refreshToken = refreshTokenModel.generate();
+  await refreshTokenModel.add(userId, refreshToken);
+  ctx.cookies.set(
+    config.cookies.refreshToken.key, refreshToken,
+    addSubdomainOpts(ctx, config.cookies.refreshToken.opts),
+  );
+};
 
 const validateRedirectUri = (redirectUri) => {
   if (!allowedOrigins.filter((origin) => redirectUri.indexOf(origin) > -1).length) {
@@ -111,6 +120,7 @@ const callback = async (ctx, providerName, payloadFunc) => {
   ctx.status = 307;
   if (state.skip_authenticate) {
     const user = await authenticateToken(ctx, primaryRedirectUri, state.provider, query.code);
+    await generateRefreshToken(ctx, user.id);
     await setAuthCookie(ctx, user);
     ctx.log.info(`connected ${user.id} with ${user.providers[0]}`);
     if (user.infoConfirmed) {
@@ -232,8 +242,8 @@ Object.keys(providersConfig).forEach((providerName) => {
       const user = await authenticate(ctx, () => redirectUri(ctx));
       const userId = user.id;
       const accessToken = await signJwt({ userId });
-      const rfToken = refreshToken.generate(userId);
-      await refreshToken.add(userId, rfToken);
+      const rfToken = refreshTokenModel.generate(userId);
+      await refreshTokenModel.add(userId, rfToken);
 
       ctx.log.info(`connected ${userId} with ${providerName}`);
 
@@ -247,31 +257,5 @@ Object.keys(providersConfig).forEach((providerName) => {
     },
   );
 });
-
-router.post(
-  '/refresh',
-  validator({
-    body: object().keys({
-      refreshToken: string().required(),
-    }),
-  }, {
-    stripUnknown: true,
-  }),
-  async (ctx) => {
-    const { body } = ctx.request;
-    const model = await refreshToken.getByToken(body.refreshToken);
-
-    if (!model) {
-      ctx.status = 403;
-      return;
-    }
-
-    ctx.log.info(`refreshed token for ${model.userId}`);
-
-    const accessToken = await signJwt({ userId: model.userId });
-    ctx.status = 200;
-    ctx.body = accessToken;
-  },
-);
 
 export default router;
