@@ -114,8 +114,8 @@ const config = {
   primaryAuthOrigin: process.env.PRIMARY_AUTH_ORIGIN,
   webappOrigin: process.env.WEBAPP_ORIGIN || 'http://localhost:5002',
   refreshToken: {
-    secret: process.env.REFRESH_TOKEN_SECRET,
-    salt: process.env.REFRESH_TOKEN_SALT,
+    secret: process.env.REFRESH_TOKEN_SECRET || 'topsecret',
+    salt: process.env.REFRESH_TOKEN_SALT || 'salt',
   },
 };
 
