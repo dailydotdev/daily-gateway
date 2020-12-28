@@ -9,7 +9,7 @@ import userModel from '../../../src/models/user';
 import provider from '../../../src/models/provider';
 import refreshTokenModel from '../../../src/models/refreshToken';
 import { sign } from '../../../src/jwt';
-import {generateChallenge} from "../../../src/auth";
+import { generateChallenge } from '../../../src/auth';
 
 describe('users routes', () => {
   let request;
@@ -238,7 +238,7 @@ describe('users routes', () => {
 
       const verifier = 'verify';
       const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: generateChallenge(verifier) });
-      const { body, headers } = await request
+      const { headers } = await request
         .post('/v1/auth/authenticate')
         .send({ code: code.token, code_verifier: verifier })
         .expect(200);
