@@ -9,6 +9,7 @@ import userModel from '../../../src/models/user';
 import provider from '../../../src/models/provider';
 import refreshTokenModel from '../../../src/models/refreshToken';
 import { sign } from '../../../src/jwt';
+import {generateChallenge} from "../../../src/auth";
 
 describe('users routes', () => {
   let request;
@@ -52,10 +53,11 @@ describe('users routes', () => {
         .get('/user')
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
-      const code = await sign({ providerCode: 'code', provider: 'github' });
-      const { body } = await request
-        .post('/v1/auth/github/authenticate')
-        .send({ code: code.token })
+      const verifier = 'verify';
+      const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: generateChallenge(verifier) });
+      const { body, headers } = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
         .expect(200);
 
       nock('https://api.github.com', {
@@ -78,7 +80,7 @@ describe('users routes', () => {
 
       const res = await request
         .get('/v1/users/me')
-        .set('Authorization', `Bearer ${body.accessToken}`)
+        .set('Cookie', headers['set-cookie'])
         .expect(200);
 
       delete res.body.createdAt;
@@ -122,10 +124,11 @@ describe('users routes', () => {
         .get('/user')
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
-      const code = await sign({ providerCode: 'code', provider: 'github' });
-      const { body } = await request
-        .post('/v1/auth/github/authenticate')
-        .send({ code: code.token })
+      const verifier = 'verify';
+      const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: generateChallenge(verifier) });
+      const { body, headers } = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
         .expect(200);
 
       nock('https://api.github.com', {
@@ -151,7 +154,7 @@ describe('users routes', () => {
 
       const res = await request
         .get('/v1/users/me')
-        .set('Authorization', `Bearer ${body.accessToken}`)
+        .set('Cookie', headers['set-cookie'])
         .expect(200);
 
       delete res.body.createdAt;
@@ -233,10 +236,11 @@ describe('users routes', () => {
         .get('/user')
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
-      const code = await sign({ providerCode: 'code', provider: 'github' });
-      const { body } = await request
-        .post('/v1/auth/github/authenticate')
-        .send({ code: code.token })
+      const verifier = 'verify';
+      const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: generateChallenge(verifier) });
+      const { body, headers } = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
         .expect(200);
 
       nock('https://api.github.com', {
@@ -259,7 +263,7 @@ describe('users routes', () => {
 
       const res = await request
         .get('/v1/users/me/info')
-        .set('Authorization', `Bearer ${body.accessToken}`)
+        .set('Cookie', headers['set-cookie'])
         .expect(200);
 
       expect(res.body).to.deep.equal({
@@ -293,10 +297,11 @@ describe('users routes', () => {
         .get('/user')
         .reply(200, { id: 'github_id', name: 'user', avatar_url: 'https://avatar.com' });
 
-      const code = await sign({ providerCode: 'code', provider: 'github' });
-      const { body } = await request
-        .post('/v1/auth/github/authenticate')
-        .send({ code: code.token })
+      const verifier = 'verify';
+      const code = await sign({ providerCode: 'code', provider: 'github', codeChallenge: generateChallenge(verifier) });
+      const { body, headers } = await request
+        .post('/v1/auth/authenticate')
+        .send({ code: code.token, code_verifier: verifier })
         .expect(200);
 
       await role.add(body.id, 'admin');
@@ -304,7 +309,7 @@ describe('users routes', () => {
 
       const res = await request
         .get('/v1/users/me/roles')
-        .set('Authorization', `Bearer ${body.accessToken}`)
+        .set('Cookie', headers['set-cookie'])
         .expect(200);
 
       expect(res.body).to.deep.equal(['admin', 'moderator']);
