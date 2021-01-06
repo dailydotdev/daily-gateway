@@ -44,6 +44,7 @@
     "@sendgrid/client": "^7.4.0",
     "@sendgrid/mail": "^7.4.0",
     "@slack/client": "^5.0.2",
+    "@slack/webhook": "^5.0.4",
     "busboy": "^0.3.1",
     "cloudinary": "^1.23.0",
     "jsonwebtoken": "^8.3.0",

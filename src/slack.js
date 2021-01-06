@@ -1,4 +1,4 @@
-import { IncomingWebhook } from '@slack/client';
+import { IncomingWebhook } from '@slack/webhook';
 
 const webhook = (process.env.SLACK_WEBHOOK && process.env.NODE_ENV === 'production')
   ? new IncomingWebhook(process.env.SLACK_WEBHOOK) : { send: () => Promise.resolve() };
