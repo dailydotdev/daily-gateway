@@ -42,7 +42,7 @@
     "@google-cloud/trace-agent": "^5.1.1",
     "@koa/cors": "3",
     "@sendgrid/client": "^7.4.1",
-    "@sendgrid/mail": "^7.4.0",
+    "@sendgrid/mail": "^7.4.1",
     "@slack/client": "^5.0.2",
     "@slack/webhook": "^5.0.4",
     "busboy": "^0.3.1",
