@@ -1169,18 +1169,18 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@sendgrid/client@^7.4.1":
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.4.1.tgz#6b319712120e098928acd7de70872e2720cf90a4"
-  integrity sha512-L7Js+5J3AFwbU27YlzKpLe4gG2avH+sSYTEg1+dW77Yai+UrkVtibvSkSSGfaIDSSKba/NA5DBUrQxr3GNZ4DQ==
+"@sendgrid/client@^7.4.1", "@sendgrid/client@^7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-7.4.2.tgz#204a9fbb5dc05a721a5d8cd8930f57f9f8e612b1"
+  integrity sha512-bu8lLbRD+OV7YsYNemEy8DRoxs8/8u325EXNlQ3VaqhcpbM0eSvdL5e5Wa7VZpbczcNCJmf/sr/uqFmwcO5S+A==
   dependencies:
-    "@sendgrid/helpers" "^7.4.0"
+    "@sendgrid/helpers" "^7.4.2"
     axios "^0.21.1"
 
-"@sendgrid/helpers@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.4.0.tgz#be98730c89c190c8873e2f25d868a13d26b75b25"
-  integrity sha512-IQI2vemiJB0+X6bEp4HRG+0/wrzR2RDGnB5rwfq1CsPDrUFdJfxbE2zbGx//1GnlNwAtbHyc93ejU1m0KZr86w==
+"@sendgrid/helpers@^7.4.0", "@sendgrid/helpers@^7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-7.4.2.tgz#d80f17da439fd241fd69f8a894d93a0fdd19df0f"
+  integrity sha512-b/IyBwT4zrOfXA0ISvWZsnhYz+5uAO20n68J8n/6qe5P1E2p0L7kWNTN5LYu0S7snJPUlbEa6FpfrSKzEcP9JA==
   dependencies:
     deepmerge "^4.2.2"
 
