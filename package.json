@@ -84,6 +84,6 @@
     "pino-pretty": "^4.3.0",
     "sinon": "^9.2.4",
     "sinon-chai": "^3.5.0",
-    "supertest": "^6.1.2"
+    "supertest": "^6.1.3"
   }
 }
