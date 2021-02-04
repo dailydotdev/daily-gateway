@@ -971,10 +971,10 @@
     lodash.snakecase "^4.1.1"
     p-defer "^3.0.0"
 
-"@google-cloud/trace-agent@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/trace-agent/-/trace-agent-5.1.1.tgz#a8223477625ccb48fb54b7835a8647a586ac33a4"
-  integrity sha512-YTcK0RLN90pLCprg0XC8uV4oAVd79vsXhkcxmEVwiOOYjUDvSrAhb7y/0SY606zgfhJHmUTNb/fZSWEtZP/slQ==
+"@google-cloud/trace-agent@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@google-cloud/trace-agent/-/trace-agent-5.1.2.tgz#a5505162eb673acc3b9032fefd7bcd43ed0dec35"
+  integrity sha512-Mgq1mBhoCdGLfJqGlJUBx/a7V6vpUwNDsycv+NQO7cBnEa9cd2cOrbj+dJZSnjDa9ld54puYOz0Lr4dC/K63xw==
   dependencies:
     "@google-cloud/common" "^3.0.0"
     "@opencensus/propagation-stackdriver" "0.0.22"
