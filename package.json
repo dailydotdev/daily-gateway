@@ -65,7 +65,7 @@
     "shortid": "^2.2.16"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.0",
+    "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.0",
     "@babel/preset-env": "^7.13.5",
