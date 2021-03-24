@@ -71,7 +71,7 @@
     "@babel/preset-env": "^7.13.10",
     "chai": "^4.3.3",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^7.21.0",
+    "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-import": "^2.22.1",
