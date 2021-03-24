@@ -83,7 +83,7 @@
     "nodemon": "^2.0.7",
     "pino-pretty": "^4.7.0",
     "sinon": "^9.2.4",
-    "sinon-chai": "^3.5.0",
+    "sinon-chai": "^3.6.0",
     "supertest": "^6.1.3"
   }
 }
