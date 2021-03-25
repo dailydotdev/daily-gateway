@@ -950,19 +950,19 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/precise-date/-/precise-date-2.0.3.tgz#14f6f28ce35dabf3882e7aeab1c9d51bd473faed"
   integrity sha512-+SDJ3ZvGkF7hzo6BGa8ZqeK3F6Z4+S+KviC9oOK+XCs3tfMyJCh/4j93XIWINgMMDIh9BgEvlw4306VxlXIlYA==
 
-"@google-cloud/profiler@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/profiler/-/profiler-4.1.0.tgz#6f5d5ea864c4da5b375773348e454a9c06958983"
-  integrity sha512-9e1zXRctLSUHAoAsFGwE4rS28fr0siiG+jXl5OpwTK8ZAUlxb70aosHaZGdsv8YXrYKjuiufjRZ/OXCs0XLI9g==
+"@google-cloud/profiler@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/profiler/-/profiler-4.1.1.tgz#57d779686449a656aadf764ea1790228884957d7"
+  integrity sha512-qk08aDxTaLnu+NoNEh5Jh+Fs5iR8lRLMr5Mb3YJDoZw72jHJI4f5N5F2JWt1xRc9D6da4gA6stBUJrbfbubvGQ==
   dependencies:
     "@google-cloud/common" "^3.0.0"
     "@types/console-log-level" "^1.4.0"
     "@types/semver" "^7.0.0"
     console-log-level "^1.4.0"
-    delay "^4.0.1"
+    delay "^5.0.0"
     extend "^3.0.2"
     gcp-metadata "^4.0.0"
-    parse-duration "^0.4.4"
+    parse-duration "^1.0.0"
     pprof "3.0.0"
     pretty-ms "^7.0.0"
     protobufjs "~6.10.0"
@@ -2447,6 +2447,11 @@ delay@^4.0.1:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/delay/-/delay-4.4.0.tgz#71abc745f3ce043fe7f450491236541edec4ad0c"
   integrity sha512-txgOrJu3OdtOfTiEOT2e76dJVfG/1dz2NZ4F0Pyt4UGZJryssMRp5vdM5wQoLwSOBNdrJv3F9PAhp/heqd7vrA==
+
+delay@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/delay/-/delay-5.0.0.tgz#137045ef1b96e5071060dd5be60bf9334436bd1d"
+  integrity sha512-ReEBKkIfe4ya47wlPYf/gu5ib6yUG0/Aez0JQZQz94kiWtRQvZIQbTiehsnwHvLSWJnQdhVeqYue7Id1dKr0qw==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -5135,10 +5140,10 @@ parent-module@^1.0.0:
   dependencies:
     callsites "^3.0.0"
 
-parse-duration@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/parse-duration/-/parse-duration-0.4.4.tgz#11c0f51a689e97d06c57bd772f7fda7dc013243c"
-  integrity sha512-KbAJuYGUhZkB9gotDiKLnZ7Z3VTacK3fgwmDdB6ZVDtJbMBT6MfLga0WJaYpPDu0mzqT0NgHtHDt5PY4l0nidg==
+parse-duration@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/parse-duration/-/parse-duration-1.0.0.tgz#8605651745f61088f6fb14045c887526c291858c"
+  integrity sha512-X4kUkCTHU1N/kEbwK9FpUJ0UZQa90VzeczfS704frR30gljxDG0pSziws06XlK+CGRSo/1wtG1mFIdBFQTMQNw==
 
 parse-json@^2.2.0:
   version "2.2.0"
