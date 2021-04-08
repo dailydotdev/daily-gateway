@@ -54,7 +54,7 @@
     "koa-context-validator": "^0.4.1",
     "koa-jwt": "^4.0.1",
     "koa-pino-logger": "^3.0.0",
-    "koa-proxies": "^0.11.0",
+    "koa-proxies": "^0.12.1",
     "koa-router": "^10.0.0",
     "koa-useragent": "^4.0.0",
     "lodash": "^4.17.21",
