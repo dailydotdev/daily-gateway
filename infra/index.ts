@@ -64,7 +64,6 @@ const bgService = new gcp.cloudrun.Service(`${name}-background`, {
   template: {
     metadata: {
       annotations: {
-        'autoscaling.knative.dev/maxScale': '20',
         'run.googleapis.com/vpc-access-connector': vpcConnector.name,
       },
     },

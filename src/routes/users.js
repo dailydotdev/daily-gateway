@@ -79,7 +79,7 @@ router.get(
     const app = ctx.request.get('app');
     if (app === 'extension' || app === 'web') {
       const referral = ctx.cookies.get(config.cookies.referral.key, config.cookies.referral.opts);
-      visit.upsert(visitId, app, new Date(), new Date(), referral)
+      visit.upsert(visitId, app, new Date(), new Date(), referral, ctx.request.ip)
         .catch((err) => ctx.log.error({ err }, `failed to update visit for ${visitId}`));
     }
   },
