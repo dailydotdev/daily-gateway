@@ -1,13 +1,10 @@
 import Router from 'koa-router';
-import sgMail from '@sendgrid/mail';
 import validator, { object, string } from 'koa-context-validator';
 
-import contest from '../models/contest';
 import userModel from '../models/user';
 import { ForbiddenError } from '../errors';
 import { getReferralLink } from '../referrals';
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import { sendEmail } from '../mailing';
 
 const router = Router({
   prefix: '/referrals',
@@ -47,7 +44,7 @@ router.post(
       }
 
       const firstName = user.name.split(' ')[0];
-      await sgMail.send({
+      await sendEmail({
         to: ctx.request.body.email,
         from: {
           email: 'hi@daily.dev',
@@ -75,42 +72,6 @@ router.post(
       ctx.status = 204;
     } else {
       throw new ForbiddenError();
-    }
-  },
-);
-
-router.get(
-  '/contests',
-  async (ctx) => {
-    const now = new Date();
-    const prizes = ['$512', '$256', '$128'];
-    const [ongoing, upcoming] = await Promise.all([
-      contest.getOngoingContest(now),
-      contest.getUpcomingContest(now),
-    ]);
-    if (ongoing) {
-      const { userId } = ctx.state.user || { userId: null };
-      const [board, me] = await Promise.all([
-        contest.getContestLeaderboard(ongoing.startAt, ongoing.endAt),
-        ctx.state.user
-          ? contest.getUserRank(ongoing.startAt, ongoing.endAt, userId)
-          : Promise.resolve(null),
-      ]);
-      ctx.status = 200;
-      ctx.body = {
-        ongoing,
-        upcoming,
-        board: board.map((b, i) => ({ ...b, prize: prizes[i] })),
-        me,
-        referralLink: getReferralLink(ctx),
-      };
-    } else {
-      ctx.status = 200;
-      ctx.body = {
-        ongoing,
-        upcoming,
-        board: [],
-      };
     }
   },
 );

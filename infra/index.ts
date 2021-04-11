@@ -102,6 +102,9 @@ const workers = [
   {topic: 'user-updated', subscription: 'user-updated-mailing'},
   {topic: 'user-registered', subscription: 'user-registered-slack'},
   {topic: 'user-reputation-updated', subscription: 'update-reputation'},
+  {topic: 'user-registered', subscription: 'user-registered-referral-contest'},
+  {topic: 'new-eligible-participant', subscription: 'new-eligible-participant-notification'},
+  {topic: 'new-eligible-participant', subscription: 'new-eligible-participant-boost-chances'},
 ]
 
 workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscription}`, {

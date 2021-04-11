@@ -1,7 +1,10 @@
+import sgMail from '@sendgrid/mail';
+
 const client = require('@sendgrid/client');
 
 if (process.env.SENDGRID_API_KEY) {
   client.setApiKey(process.env.SENDGRID_API_KEY);
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
 const profileToContact = (profile, contactId) => {
@@ -68,4 +71,10 @@ export const getContactIdByEmail = async (email) => {
 export const updateUserContact = async (newProfile, oldEmail, lists) => {
   const contactId = await getContactIdByEmail(oldEmail);
   return addUserToContacts(newProfile, lists, contactId);
+};
+
+export const sendEmail = async (data) => {
+  if (process.env.SENDGRID_API_KEY) {
+    await sgMail.send(data);
+  }
 };

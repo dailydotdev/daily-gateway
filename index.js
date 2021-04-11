@@ -6,10 +6,11 @@ import background from './src/background';
 import config from './src/config';
 import { migrate } from './src/db';
 
+const isBackground = process.env.MODE === 'background';
+
 logger.info('migrating database');
-migrate()
+(isBackground ? Promise.resolve() : migrate())
   .then(() => {
-    const isBackground = process.env.MODE === 'background';
     const app = isBackground ? background : foreground;
     const server = app.listen(config.port);
 

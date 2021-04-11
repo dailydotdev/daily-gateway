@@ -1,8 +1,9 @@
 import db, { toCamelCase, toSnakeCase } from '../db';
 
 const table = 'referral_contests';
+const participantsTable = 'referral_participants';
 
-const select = () => db.select('start_at', 'end_at').from(table);
+const select = () => db.select('id', 'start_at', 'end_at').from(table);
 
 const getOngoingContest = (now = new Date()) => select()
   .where('start_at', '<=', now)
@@ -19,37 +20,6 @@ const getUpcomingContest = (now = new Date()) => select()
   .then((res) => res.map(toCamelCase))
   .then((res) => (res.length ? res[0] : null));
 
-const referralCounts = (startAt, endAt) => db
-  .select('referral as user_id', db.raw('count(*) as points'), db.raw('max(created_at) as last_referral'))
-  .from('users')
-  .groupBy('referral')
-  .whereBetween('created_at', [startAt, endAt])
-  .andWhereRaw('referral is not null')
-  .as('rc');
-
-const getContestLeaderboard = (startAt, endAt) => db
-  .select('u.image', 'u.name', 'rc.points')
-  .from(referralCounts(startAt, endAt))
-  .join('users as u', 'u.id', '=', 'rc.user_id')
-  .orderBy([{ column: 'rc.points', order: 'desc' }, 'rc.last_referral'])
-  .limit(5)
-  .then((res) => res.map(toCamelCase));
-
-const getUserRank = (startAt, endAt, userId) => db
-  .select(
-    'points',
-    db.select(db.raw('1+count(*) as rank'))
-      .from(referralCounts(startAt, endAt).as('inner'))
-      .where('points', '>', db.raw('rc.points'))
-      .orWhere(db.raw('points = rc.points and rc.last_referral > last_referral'))
-      .as('rank'),
-  )
-  .from(referralCounts(startAt, endAt))
-  .where('user_id', '=', userId)
-  .andWhere('points', '>', 0)
-  .then((res) => res.map(toCamelCase))
-  .then((res) => (res.length ? res[0] : null));
-
 const add = (startAt, endAt) => {
   const obj = {
     startAt,
@@ -58,10 +28,37 @@ const add = (startAt, endAt) => {
   return db.insert(toSnakeCase(obj)).into(table).then(() => obj);
 };
 
+const incrementParticipantCount = (contestId, userId) => {
+  const obj = {
+    contestId,
+    userId,
+    referrals: 1,
+    eligible: false,
+  };
+  const query = db.insert(toSnakeCase(obj)).into(participantsTable).toString();
+  return db.raw(`${query} on duplicate key update referrals = referrals + 1`);
+};
+
+const setParticipantAsEligible = (contestId, userId) => db(participantsTable)
+  .where('contest_id', '=', contestId)
+  .andWhere('user_id', '=', userId)
+  .update(toSnakeCase({
+    eligible: true,
+  }));
+
+const getParticipant = (contestId, userId) => db.select('*')
+  .from(participantsTable)
+  .where('contest_id', '=', contestId)
+  .andWhere('user_id', '=', userId)
+  .limit(1)
+  .then((res) => res.map(toCamelCase))
+  .then((res) => (res.length ? res[0] : null));
+
 export default {
   getOngoingContest,
   getUpcomingContest,
-  getContestLeaderboard,
-  getUserRank,
   add,
+  incrementParticipantCount,
+  setParticipantAsEligible,
+  getParticipant,
 };
