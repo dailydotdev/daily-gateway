@@ -5,6 +5,7 @@ import userModel from '../models/user';
 import { ForbiddenError } from '../errors';
 import { getReferralLink } from '../referrals';
 import { sendEmail } from '../mailing';
+import contest from '../models/contest';
 
 const router = Router({
   prefix: '/referrals',
@@ -73,6 +74,30 @@ router.post(
     } else {
       throw new ForbiddenError();
     }
+  },
+);
+
+router.get(
+  '/monthly',
+  async (ctx) => {
+    if (!ctx.state.user) {
+      throw new ForbiddenError();
+    }
+
+    const ongoingContest = await contest.getOngoingContest();
+    if (!ongoingContest) {
+      throw new ForbiddenError();
+    }
+
+    const participant = await contest.getParticipant(ongoingContest.id, ctx.state.user.userId);
+
+    ctx.status = 200;
+    ctx.body = {
+      endAt: ongoingContest.endAt,
+      referrals: (participant && participant.referrals) || 0,
+      eligible: (participant && participant.eligible > 0) || false,
+      threshold: 5,
+    };
   },
 );
 
