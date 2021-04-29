@@ -1,0 +1,56 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  ignore:
+  - dependency-name: koa-context-validator
+    versions:
+    - ">= 0.5.a, < 0.6"
+  - dependency-name: "@google-cloud/pubsub"
+    versions:
+    - 2.10.0
+    - 2.11.0
+  - dependency-name: sinon
+    versions:
+    - 10.0.1
+  - dependency-name: "@babel/core"
+    versions:
+    - 7.12.16
+    - 7.12.17
+    - 7.13.1
+    - 7.13.13
+    - 7.13.8
+  - dependency-name: knex
+    versions:
+    - 0.95.2
+  - dependency-name: "@babel/node"
+    versions:
+    - 7.12.17
+    - 7.13.10
+  - dependency-name: mocha
+    versions:
+    - 8.3.0
+    - 8.3.1
+  - dependency-name: "@babel/preset-env"
+    versions:
+    - 7.12.13
+    - 7.13.0
+    - 7.13.10
+    - 7.13.8
+    - 7.13.9
+  - dependency-name: nock
+    versions:
+    - 13.0.10
+    - 13.0.9
+  - dependency-name: pino-pretty
+    versions:
+    - 4.5.0
+    - 4.6.0
+  - dependency-name: "@babel/cli"
+    versions:
+    - 7.12.13
+  - dependency-name: eslint
+    versions:
+    - 7.19.0
