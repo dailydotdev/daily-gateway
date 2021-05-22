@@ -103,7 +103,7 @@ app.use(redirects.routes(), redirects.allowedMethods());
 app.use(premium.routes(), premium.allowedMethods());
 
 app.use(proxy('/r', {
-  target: config.redirectorUrl,
+  target: config.apiUrl,
   changeOrigin: true,
   xfwd: true,
 }));

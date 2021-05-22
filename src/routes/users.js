@@ -110,6 +110,11 @@ router.put(
         throw new ForbiddenError();
       }
       const { body } = ctx.request;
+      ['username', 'twitter', 'github', 'hashnode'].forEach((key) => {
+        if (body[key]) {
+          body[key] = body[key].replace('@', '');
+        }
+      });
       const newProfile = {
         ...user,
         acceptedMarketing: true,
