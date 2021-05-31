@@ -46,7 +46,7 @@
     "@slack/client": "^5.0.2",
     "@slack/webhook": "^6.0.0",
     "busboy": "^0.3.1",
-    "cloudinary": "^1.25.1",
+    "cloudinary": "^1.25.2",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.95.6",
     "koa": "^2.13.1",
