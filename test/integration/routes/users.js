@@ -457,6 +457,28 @@ describe('users routes', () => {
       });
     });
 
+    it('should throw bad request on duplicate email when initial email is also the same', async () => {
+      await userModel.add('id', 'John', 'john@acme.com');
+      await userModel.add('id2', 'John2', 'john@acme.com');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: 'John', email: 'john@acme.com', company: 'ACME', title: 'Developer', username: 'john',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        message: 'email already exists',
+        field: 'email',
+        reason: 'email already exists',
+      });
+    });
+
     it('should throw bad request on duplicate username', async () => {
       await userModel.add('id', 'John');
       await userModel.add('id2', 'John2');

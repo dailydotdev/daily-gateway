@@ -34,13 +34,8 @@ const checkDuplicateEmail = (id, email) => db
   .select('id')
   .from(table)
   .where('email', '=', email)
-  .then((res) => {
-    // Workaround for existing accounts with duplicate emails
-    if (!res.length) {
-      return false;
-    }
-    return res.findIndex((u) => u.id === id) < 0;
-  });
+  .andWhere('id', '!=', id)
+  .then((res) => !!res.length);
 
 const add = (id, name, email, image, referral = null) => {
   const obj = {
