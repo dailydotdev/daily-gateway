@@ -89,7 +89,8 @@ router.put(
   '/me',
   validator({
     body: object().keys({
-      name: string().required().max(50),
+      name: string().required().trim().min(1)
+        .max(50),
       email: string().email().required(),
       company: string().allow(null).max(50),
       title: string().allow(null).max(50),

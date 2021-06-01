@@ -591,6 +591,27 @@ describe('users routes', () => {
         reason: '"username" with value "john&#x24;&#x25;&#x5e;" fails to match the required pattern: /^@?(\\w){1,15}$/',
       });
     });
+
+    it('should throw bad request on whitespace name', async () => {
+      await userModel.add('id', 'John');
+      const accessToken = await sign({ userId: 'id' }, null);
+
+      const res = await request
+        .put('/v1/users/me')
+        .set('Cookie', [`da3=${accessToken.token}`])
+        .set('Content-Type', 'application/json')
+        .send({
+          name: '   ', email: 'john@acme.com', username: 'john$%^',
+        })
+        .expect(400);
+
+      expect(res.body).to.deep.equal({
+        code: 1,
+        field: 'name',
+        message: 'child "name" fails because ["name" is not allowed to be empty]',
+        reason: '"name" is not allowed to be empty',
+      });
+    });
   });
 
   describe('get user profile', () => {
