@@ -11,8 +11,9 @@ const profileToContact = (profile, contactId) => {
   let contact = {};
   if (profile) {
     contact = { email: profile.email, custom_fields: { e1_T: profile.id } };
-    if (profile.name) {
-      const split = profile.name.split(' ');
+    const name = profile.name && profile.name.trim();
+    if (name && name.length) {
+      const split = name.trim().split(' ');
       [contact.first_name] = split;
       contact.last_name = split.slice(1).join(' ');
     }
