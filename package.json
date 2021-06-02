@@ -68,7 +68,7 @@
     "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.3",
     "@babel/node": "^7.14.2",
-    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "eslint": "^7.27.0",
