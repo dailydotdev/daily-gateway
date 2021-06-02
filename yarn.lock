@@ -5345,10 +5345,10 @@ pino-http@^5.0.1:
     pino "^6.0.0"
     pino-std-serializers "^2.4.0"
 
-pino-pretty@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-5.0.1.tgz#2cbdf1d743d97df3f0a9dd41cf440274ec770082"
-  integrity sha512-sm218/N1P6w6YWoebpME1xsT4tm+yNQWDBx3JzlH0mLYEt3uICEZqntAIw3LqYjlbX4mavo6kZV0cfGsZNO2tQ==
+pino-pretty@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-5.0.2.tgz#89b0c21d4fbf7cb7bf005268b4d6c6230a9a833f"
+  integrity sha512-nOoRoQXYZgURqtSwsM+FLFHBTrZRjuMKfQhELMeewjHnM8xdNhlkqLEGxBpcSCkFlfjHX3jdav9TQzQljjSL9w==
   dependencies:
     "@hapi/bourne" "^2.0.0"
     "@types/node" "^15.3.0"
