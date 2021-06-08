@@ -1,102 +1,87 @@
 import * as gcp from '@pulumi/gcp';
-import {
-  addIAMRolesToServiceAccount, config,
-  createEnvVarsFromSecret, getCloudRunPubSubInvoker,
-  infra,
-  location, serviceAccountToMember,
-} from './helpers';
 import {Output} from '@pulumi/pulumi';
+import {
+  CloudRunAccess,
+  config, createCloudRunService, createEnvVarsFromSecret,
+  createK8sServiceAccountFromGCPServiceAccount, createMigrationJob,
+  createServiceAccountAndGrantRoles, createSubscriptionsFromWorkers,
+  imageTag, infra
+} from "@dailydotdev/pulumi-common";
 
 const name = 'gateway';
 
-const imageTag = config.require('tag');
-
 const vpcConnector = infra.getOutput('serverlessVPC') as Output<gcp.vpcaccess.Connector>;
 
-const serviceAccount = new gcp.serviceaccount.Account(`${name}-sa`, {
-  accountId: `daily-${name}`,
-  displayName: `daily-${name}`,
-});
-
-addIAMRolesToServiceAccount(
+const {serviceAccount} = createServiceAccountAndGrantRoles(
+  `${name}-sa`,
   name,
+  `daily-${name}`,
   [
     {name: 'profiler', role: 'roles/cloudprofiler.agent'},
     {name: 'trace', role: 'roles/cloudtrace.agent'},
     {name: 'secret', role: 'roles/secretmanager.secretAccessor'},
     {name: 'pubsub', role: 'roles/pubsub.editor'},
   ],
-  serviceAccount,
 );
 
 const secrets = createEnvVarsFromSecret(name);
 
 const image = `gcr.io/daily-ops/daily-${name}:${imageTag}`;
 
-const service = new gcp.cloudrun.Service(name, {
-  name,
-  autogenerateRevisionName: true,
-  location,
-  template: {
-    metadata: {
-      annotations: {
-        'autoscaling.knative.dev/maxScale': '20',
-        'run.googleapis.com/vpc-access-connector': vpcConnector.name,
-      },
-    },
-    spec: {
-      serviceAccountName: serviceAccount.email,
-      containers: [
-        {
-          image,
-          resources: {limits: {cpu: '1', memory: '512Mi'}},
-          envs: secrets,
-        },
-      ],
-    },
-  },
-});
+// Create K8S service account and assign it to a GCP service account
+const {namespace} = config.requireObject<{
+  namespace: string;
+  host: string;
+}>('k8s');
 
-const bgService = new gcp.cloudrun.Service(`${name}-background`, {
-  name: `${name}-background`,
-  autogenerateRevisionName: true,
-  location,
-  template: {
-    metadata: {
-      annotations: {
-        'run.googleapis.com/vpc-access-connector': vpcConnector.name,
-      },
-    },
-    spec: {
-      serviceAccountName: serviceAccount.email,
-      containers: [
-        {
-          image,
-          resources: {limits: {cpu: '1', memory: '256Mi'}},
-          envs: [...secrets, {name: 'MODE', value: 'background'}],
-        },
-      ],
-    },
+const k8sServiceAccount = createK8sServiceAccountFromGCPServiceAccount(
+  `${name}-k8s-sa`,
+  name,
+  namespace,
+  serviceAccount,
+);
+const migrationJob = createMigrationJob(
+  `${name}-migration`,
+  namespace,
+  image,
+  ['yarn', 'run', 'db:migrate:latest'],
+  secrets,
+  k8sServiceAccount,
+);
+
+// Deploy to Cloud Run (foreground & background)
+const service = createCloudRunService(
+  name,
+  image,
+  secrets,
+  {cpu: '1', memory: '512Mi'},
+  vpcConnector,
+  serviceAccount,
+  {
+    minScale: 1,
+    concurrency: 250,
+    dependsOn: [migrationJob],
+    access: CloudRunAccess.Public,
+    iamMemberName: `${name}-public`,
   },
-});
+);
+
+const bgService = createCloudRunService(
+  `${name}-background`,
+  image,
+  [...secrets, {name: 'MODE', value: 'background'}],
+  {cpu: '1', memory: '256Mi'},
+  vpcConnector,
+  serviceAccount,
+  {
+    dependsOn: [migrationJob],
+    access: CloudRunAccess.PubSub,
+    iamMemberName: `${name}-pubsub-invoker`,
+  },
+);
 
 export const serviceUrl = service.statuses[0].url;
 export const bgServiceUrl = bgService.statuses[0].url;
-
-new gcp.cloudrun.IamMember(`${name}-public`, {
-  service: service.name,
-  location,
-  role: 'roles/run.invoker',
-  member: 'allUsers',
-});
-
-const cloudRunPubSubInvoker = getCloudRunPubSubInvoker();
-new gcp.cloudrun.IamMember(`${name}-pubsub-invoker`, {
-  service: bgService.name,
-  location,
-  role: 'roles/run.invoker',
-  member: serviceAccountToMember(cloudRunPubSubInvoker)
-});
 
 const workers = [
   {topic: 'user-updated', subscription: 'user-updated-mailing'},
@@ -107,17 +92,4 @@ const workers = [
   {topic: 'new-eligible-participant', subscription: 'new-eligible-participant-boost-chances'},
 ]
 
-workers.map((worker) => new gcp.pubsub.Subscription(`${name}-sub-${worker.subscription}`, {
-  topic: worker.topic,
-  name: worker.subscription,
-  pushConfig: {
-    pushEndpoint: bgServiceUrl.apply((url) => `${url}/${worker.subscription}`),
-    oidcToken: {
-      serviceAccountEmail: cloudRunPubSubInvoker.email,
-    }
-  },
-  retryPolicy: {
-    minimumBackoff: '10s',
-    maximumBackoff: '600s',
-  }
-}));
+createSubscriptionsFromWorkers(name, workers, bgServiceUrl);

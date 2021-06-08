@@ -67,5 +67,8 @@ config:
       secure: AAABAAFLY0icakYeqt+Md5z4GPC5KR7hMz+AUYrNsTdYliWLoGxYHLqy9DIohJ489N8bxVE+XVTL9tDdRk/CdgJ4FLCwIKGecSiuLTBnv2YBXVHKdEP6AJXevkzwjBXBS9RD/og8dORkiys6nlG7fsM=
     webappOrigin:
       secure: AAABAIqlleKQsN1FpB1M2kfuP7qap03jqkB+QfZP4EoApt+twCEs2nbqCT07ljv700WuVRs=
+  gateway:k8s:
+    namespace: daily
+  gateway:tag: 0e398aa673764abf5aff52ccec28bc7daac68cd2
   gcp:project: devkit-prod
   gcp:region: us-central1

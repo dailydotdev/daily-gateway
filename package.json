@@ -13,7 +13,8 @@
     "build": "babel . -d build --source-maps --ignore build,node_modules,test && cp package.json yarn.lock ./build",
     "babel-node": "babel-node",
     "watch": "nodemon --exec yarn run babel-node -- $npm_package_main | pino-pretty",
-    "start": "node $npm_package_main | pino-stackdriver"
+    "start": "node $npm_package_main | pino-stackdriver",
+    "db:migrate:latest": "yarn run knex migrate:latest"
   },
   "repository": {
     "type": "git",
