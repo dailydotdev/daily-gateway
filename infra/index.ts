@@ -5,7 +5,7 @@ import {
   config, createCloudRunService, createEnvVarsFromSecret,
   createK8sServiceAccountFromGCPServiceAccount, createMigrationJob,
   createServiceAccountAndGrantRoles, createSubscriptionsFromWorkers,
-  imageTag, infra
+  imageTag, infra, k8sServiceAccountToIdentity
 } from "@dailydotdev/pulumi-common";
 
 const name = 'gateway';
@@ -40,6 +40,13 @@ const k8sServiceAccount = createK8sServiceAccountFromGCPServiceAccount(
   namespace,
   serviceAccount,
 );
+
+new gcp.serviceaccount.IAMBinding(`${name}-k8s-iam-binding`, {
+  role: 'roles/iam.workloadIdentityUser',
+  serviceAccountId: serviceAccount.id,
+  members: [k8sServiceAccountToIdentity(k8sServiceAccount)],
+});
+
 const migrationJob = createMigrationJob(
   `${name}-migration`,
   namespace,
