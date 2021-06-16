@@ -1219,10 +1219,10 @@
   dependencies:
     deepmerge "^4.2.2"
 
-"@sendgrid/mail@^7.4.4":
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.4.4.tgz#cc31915342d0233592baa6e80b74beaf32e0bf2b"
-  integrity sha512-9+dyArajxbPY7eJJAd2eps7MVsXW9E4Y294gWeMYku0/Id/qAivexidjstvkkVlZdlrHbEsGDlnMEcw2eXOiFg==
+"@sendgrid/mail@^7.4.5":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-7.4.5.tgz#22cef36e793134833b36aff5d3f4f53e8f81dd52"
+  integrity sha512-adXMvrTUOlYr7+UTigZRGSYR9vheBv1y4fF2mugn29NBdQMfcQPGLQ5vIHgSAfcboBFCagZdamZqM5FeSGU0Hw==
   dependencies:
     "@sendgrid/client" "^7.4.3"
     "@sendgrid/helpers" "^7.4.3"
